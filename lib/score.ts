@@ -17,8 +17,21 @@ import { ScoreBatch, type Profile, type Rubric } from "./schemas";
    Partial failure: one dead batch does not kill the round. The profiles it
    covered come back as `unscored` and the UI says so plainly.               */
 
-const BATCH_SIZE = 8;
-const CONCURRENCY = 2;
+/* Sized against Groq's free tier, which is token-per-minute limited (8k/min on
+   a new key) rather than request limited. Two 4k-token calls in flight blow the
+   whole minute's budget at once and every subsequent call 429s, so scoring runs
+   one batch at a time with a modest output cap.
+
+   Batch size is a token trade, not a latency one: the system prompt is resent
+   with every batch, so *larger* batches spend fewer total tokens. Completion
+   tokens scale with profile count either way. Six is where the per-batch
+   response still fits comfortably under the output cap. Throughput here is
+   bounded by the account's tokens-per-minute, not by the code. */
+const BATCH_SIZE = 6;
+const CONCURRENCY = 1;
+/** Whole-run budget. Past this, remaining batches fail fast and their profiles
+    come back as unscored rather than the recruiter watching a spinner. */
+const RUN_BUDGET_MS = 60_000;
 
 const cache = new Map<string, VerifiedScore>();
 
@@ -46,6 +59,7 @@ export type ScoreRun = {
 };
 
 export async function scoreProfiles(profiles: Profile[], rubric: Rubric): Promise<ScoreRun> {
+  const deadline = Date.now() + RUN_BUDGET_MS;
   const hash = rubricHash(rubric);
   const scores: VerifiedScore[] = [];
   const todo: Profile[] = [];
@@ -65,11 +79,18 @@ export async function scoreProfiles(profiles: Profile[], rubric: Rubric): Promis
     const { system, user } = loadPrompt("score", {
       role_summary: rubric.role_summary,
       criteria: renderCriteria(rubric),
-      profiles: JSON.stringify(batch, null, 1),
+      profiles: JSON.stringify(batch),
     });
     return {
       batch,
-      result: await callLLM({ system, user, schema: ScoreBatch, label: "scoring", maxTokens: 6000 }),
+      result: await callLLM({
+        system,
+        user,
+        schema: ScoreBatch,
+        label: "scoring",
+        maxTokens: 2600,
+        deadline,
+      }),
     };
   });
 

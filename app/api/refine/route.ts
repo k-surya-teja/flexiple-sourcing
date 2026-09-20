@@ -71,7 +71,7 @@ export async function POST(req: Request) {
       : "",
   });
 
-  const result = await callLLM({ system, user, schema: RefineResult, label: "refinement", maxTokens: 2000, temperature: 0.3 });
+  const result = await callLLM({ system, user, schema: RefineResult, label: "refinement", maxTokens: 2200, temperature: 0.3 });
   if (!result.ok) return errorResponse(result.error);
 
   const next = applyOps(

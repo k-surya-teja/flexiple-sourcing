@@ -28,6 +28,28 @@ Prefer reweighting an existing criterion over adding a new one. Prefer adding
 one sharp criterion over three vague ones. Emit between one and four operations
 total: a recruiter who says one thing should not see six changes.
 
+**`set_title_keywords` is almost always the wrong operation.** Titles vary far
+more than the work behind them: a "Full Stack Engineer", a "Senior Software
+Engineer" and a "Tech Lead" may all do the job a "Backend Engineer" does. When a
+recruiter rejects someone whose *title* is wrong, what they are really rejecting
+is the kind of work that title implies — and the way to encode that is a rubric
+criterion, often one with `polarity: "negative"`, which pushes that kind of
+person down the ranking instead of deleting them from the search. Only set title
+keywords if the recruiter names a function as a hard requirement in their own
+words ("only platform engineers", "must be a designer").
+
+Worked example. The recruiter says: *"1 is an infrastructure person, not a
+product engineer — I need people writing application code."*
+
+- Wrong: `set_title_keywords: ["Backend Engineer", "Software Engineer"]`. This
+  silently deletes the full-stack engineer and the tech lead who both write
+  exactly the application code being asked for.
+- Right: add a criterion for application-code ownership at a high weight, and
+  add or reweight a `polarity: "negative"` criterion for purely infrastructural
+  or database-administration careers. The infrastructure profile drops to the
+  bottom, stays visible, and the recruiter keeps the option of changing their
+  mind.
+
 ### Reading the feedback
 
 The recruiter refers to profiles by position ("1 is too junior", "2 and 4 are

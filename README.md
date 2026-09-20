@@ -20,7 +20,11 @@ Open http://localhost:3000.
 
 **Environment variable: `GROQ_API_KEY`.** A free key takes about a minute at
 [console.groq.com/keys](https://console.groq.com/keys). Optionally set
-`GROQ_MODEL` to override the default (`llama-3.3-70b-versatile`).
+`GROQ_MODEL` to override the default (`openai/gpt-oss-120b`); the app falls back
+to `openai/gpt-oss-20b` then `qwen/qwen3.8-27b` if a model is unavailable.
+
+Set `LLM_DEBUG=1` to log every model call with its latency and token usage — how
+the rate-limit behaviour below was diagnosed.
 
 Without a key the app still runs and shows a designed "no API key configured"
 state rather than crashing.
@@ -108,9 +112,36 @@ Every LLM call goes through one wrapper, `callLLM` in `lib/llm.ts`, which owns:
 | Malformed JSON | Fence stripping, trailing-comma repair, then **one corrective round trip with the Zod error fed back to the model** |
 | Schema mismatch after repair | Typed `malformed`; nothing is applied, and the raw response is viewable in the card |
 | One scoring batch fails | The round still returns. Affected profiles are listed as unscored and the UI says so |
+| Whole run overruns | A 60s scoring budget and a 70s per-call deadline; past those, partial results are returned rather than a hanging spinner |
 
 Route handlers only ever branch on a typed error. Each of the six kinds has its
 own title, explanation and next step in the UI — there is no generic toast.
+
+### Working inside an 8k token-per-minute budget
+
+A new Groq key allows **8,000 tokens per minute**, which turned out to be the
+binding constraint on this whole design, and a genuinely instructive one.
+
+Three things came out of measuring it rather than guessing (`LLM_DEBUG=1`):
+
+- **`max_tokens` is a reservation, not a ceiling to be generous with.** An early
+  version asked for 12,000 output tokens per scoring call — more than the entire
+  minute's budget — so every call 429'd, and the retry-then-fall-back-to-another-model
+  chain turned one search into a 17-minute hang. Budgets are now sized to the
+  work (2,600 for a scoring batch) and there is a hard deadline so no round can
+  ever run away like that again.
+- **Batch size is a token trade, not a latency one.** The system prompt is resent
+  with every batch, so *larger* batches spend fewer total tokens; completion
+  tokens scale with profile count either way. Scoring runs one batch of six at a
+  time, sequentially — two parallel calls at ~4k tokens each blow the minute's
+  budget in one go.
+- **A rate limit is account-wide, so falling back to another model is pure
+  waste.** Only `upstream` and `truncated` failures walk the model chain; a 429
+  waits out its `Retry-After` instead.
+
+Together these took a cold search from 32s to **under 7s**. When the limit is hit
+anyway on a wide search, the UI says so in plain language after a few seconds
+rather than spinning silently.
 
 ### Prompts
 
@@ -170,14 +201,22 @@ the rest on the dataset, verification and this document.
 
 ### Known limits
 
+- **A profile the recruiter explicitly approved can still slip down the ranking.**
+  In testing, adding two weight-5 criteria on top of five existing ones compressed
+  the score range and moved an approved profile from #3 to #6. Scores are produced
+  per batch without sight of the whole pool, so they are calibrated loosely.
+  Pinning approved profiles, or asking the refinement step to cap the number of
+  weight-5 criteria, would be the first fix with more time.
+
 - Below 1280px the three columns stack into one. It is usable, but this is a
   desktop tool and the desktop layout is the one that got the attention.
 - Skill matching is token-based with a small alias table (`postgres` →
   `postgresql`, `k8s` → `kubernetes`). It is deliberately conservative: a filter
   that over-matches is worse than one that under-matches, because a recruiter can
   see a candidate who is missing but not one who was wrongly included.
-- `MAX_SCORED = 24` and the 8-profile batch size are tuned for Groq's free tier,
-  not for throughput.
+- `MAX_SCORED = 15`, `BATCH_SIZE = 6` and the token budgets are tuned for Groq's
+  free tier, not for throughput. On a paid key, raising concurrency is the single
+  biggest available speedup.
 
 ---
 

@@ -27,25 +27,21 @@ Then give an overall 0–100 score and a verdict:
 - `weak` (below 45) — clears the hard filters but is not a fit.
 
 Use the full range. If every profile scores 80 the ranking tells the recruiter
-nothing. Profiles that merely satisfy the objective filters without any of the
-subjective qualities should land in the 30s and 40s.
+nothing. A profile that merely satisfies the objective filters without any of the
+subjective qualities belongs in the 30s and 40s.
 
 ### Evidence rules — the part that matters
 
-For every criterion you mark `yes` or `partial`, cite at least one piece of
-evidence:
+Every criterion you mark `yes` or `partial` needs at least one citation. A
+criterion marked `no` needs none.
 
-- `field` must be exactly one of: `current_title`, `years_experience`,
-  `location`, `current_company`, `current_company_type`, `skills`,
-  `past_companies`, `education`, `summary`.
-- `value` must be a string that appears **verbatim** in that field of that
-  profile. Copy it, do not paraphrase it.
-  - For `skills`, quote one skill exactly as written: `"AWS RDS"`, not `"RDS"`.
-  - For `years_experience`, quote the number as a string: `"6"`.
-  - For `past_companies`, quote the company name exactly: `"Razorpay"`.
-  - For `summary`, quote a real phrase from the summary, not your own words.
-
-A criterion marked `no` needs no evidence.
+- `field` must be one of: `current_title`, `years_experience`, `location`,
+  `current_company`, `current_company_type`, `skills`, `past_companies`,
+  `education`, `summary`.
+- `value` must appear **verbatim** in that field of that profile. Copy it, never
+  paraphrase. Quote a skill exactly as written (`"AWS RDS"`, not `"RDS"`), a
+  year count as a string (`"6"`), a past company by name (`"Razorpay"`), and a
+  summary phrase as it is actually worded.
 
 ### The headline
 

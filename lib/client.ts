@@ -3,7 +3,7 @@ import type { VerifiedScore } from "./evidence";
 import type { FilterKey } from "./filter";
 
 export type LLMErrorShape = {
-  kind: "missing_key" | "rate_limit" | "timeout" | "upstream" | "malformed" | "empty";
+  kind: "missing_key" | "rate_limit" | "timeout" | "upstream" | "malformed" | "truncated" | "empty";
   message: string;
   retryAfter?: number;
   raw?: string;

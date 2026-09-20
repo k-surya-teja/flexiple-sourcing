@@ -7,6 +7,7 @@ const STATUS: Record<LLMError["kind"], number> = {
   timeout: 504,
   upstream: 502,
   malformed: 502,
+  truncated: 502,
   empty: 502,
 };
 

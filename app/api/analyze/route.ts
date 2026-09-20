@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     location_vocabulary: locations.join(", "),
   });
 
-  const result = await callLLM({ system, user, schema: AnalyzeResult, label: "criteria", maxTokens: 2000 });
+  const result = await callLLM({ system, user, schema: AnalyzeResult, label: "criteria", maxTokens: 2200 });
   if (!result.ok) return errorResponse(result.error);
 
   // Free preview: filtering is pure code, so we can tell the recruiter how many

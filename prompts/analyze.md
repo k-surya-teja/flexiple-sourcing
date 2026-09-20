@@ -18,12 +18,27 @@ preference in the rubric instead. An over-eager filter silently deletes good
 candidates and the recruiter never finds out.
 
 **2. A fit rubric** — the subjective qualities that separate a good candidate
-from one who merely clears the bar. Three to six criteria, each weighted 1 to 5
-(5 = defining for this role, 1 = pleasant bonus). Criteria must be things you
-could actually judge from a CV-shaped profile. Never restate a filter as a
-criterion: if years of experience is already a filter, do not also make
-"has the right experience level" a criterion. Use `polarity: "negative"` for a
-disqualifying trait the recruiter wants to avoid.
+from one who merely clears the bar. Three to five criteria, each weighted 1 to 5
+(5 = defining for this role, 1 = pleasant bonus). Use `polarity: "negative"` for
+a disqualifying trait the recruiter wants to avoid.
+
+Two hard constraints on criteria:
+
+- **It must be judgeable from the profile.** Downstream, a scorer sees only these
+  fields: `current_title`, `years_experience`, `location`, `current_company`,
+  `current_company_type`, `skills`, `past_companies`, `education`, `summary`.
+  "Communication skills", "culture fit", "willingness to learn" and anything else
+  you cannot evidence from that list are forbidden — they produce confident
+  guesses, which is worse than no criterion at all.
+- **It must not restate a filter.** If years of experience is already a filter,
+  "has the right experience level" is not a criterion. The rubric exists to rank
+  the people who already cleared the filters, so a criterion every survivor
+  satisfies is wasted.
+
+Good criteria describe *shape of career and depth of ownership*: whether they
+built the thing or only used it, the domain they worked in, the stage of company,
+whether their responsibility grew. Those are all visible in a summary and a work
+history.
 
 ### Vocabulary grounding
 

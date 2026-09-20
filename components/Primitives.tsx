@@ -143,6 +143,10 @@ const ERROR_COPY: Record<LLMErrorShape["kind"], { title: string; hint: string }>
     title: "The model returned an unusable response",
     hint: "It failed schema validation twice, including one corrected retry. Nothing was applied.",
   },
+  truncated: {
+    title: "The model ran out of room",
+    hint: "It spent its token budget before finishing the JSON. The next model in the chain is tried automatically.",
+  },
   empty: { title: "The model returned nothing", hint: "An empty completion. Retrying usually clears it." },
 };
 
@@ -222,19 +226,40 @@ export function ProfileSkeleton({ i }: { i: number }) {
   );
 }
 
+/* A long wait needs an explanation, not a longer spinner. On the free tier a
+   wide shortlist genuinely queues behind the token-per-minute limit, so after a
+   few seconds the copy says so rather than leaving the recruiter guessing. */
 export function ThinkingLine({ label }: { label: string }) {
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setElapsed((e) => e + 1), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const note =
+    elapsed >= 22
+      ? "Still going — scores already returned are kept, so nothing is lost."
+      : elapsed >= 11
+        ? "Taking longer than usual. Groq's free tier allows 8k tokens a minute, so a wide shortlist queues."
+        : null;
+
   return (
-    <div className="flex items-center gap-2 text-[12.5px] font-medium text-ink-3">
-      <span className="flex gap-1">
-        {[0, 1, 2].map((i) => (
-          <span
-            key={i}
-            className="dot h-1.5 w-1.5 rounded-full bg-accent"
-            style={{ animationDelay: `${i * 0.16}s` }}
-          />
-        ))}
-      </span>
-      {label}
+    <div className="space-y-1.5">
+      <div className="flex items-center gap-2 text-[12.5px] font-medium text-ink-3">
+        <span className="flex gap-1">
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className="dot h-1.5 w-1.5 rounded-full bg-accent"
+              style={{ animationDelay: `${i * 0.16}s` }}
+            />
+          ))}
+        </span>
+        {label}
+        {elapsed > 3 && <span className="font-mono text-[11px] tabular-nums text-ink-3/70">{elapsed}s</span>}
+      </div>
+      {note && <p className="pl-6 text-[11.5px] leading-relaxed text-ink-3">{note}</p>}
     </div>
   );
 }

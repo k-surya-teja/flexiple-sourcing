@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 
 /** Keeps a wide search from turning into a 40-second wait. Surfaced in the UI
     rather than hidden, so the recruiter knows the list is not the whole pool. */
-const MAX_SCORED = 24;
+const MAX_SCORED = 15;
 
 const Body = z.object({ filters: Filters, rubric: Rubric });
 
