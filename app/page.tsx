@@ -43,16 +43,24 @@ export default function Page() {
   const history = useRef<string[]>([]);
   /** The last failed step, so every error card has a working retry. */
   const retry = useRef<(() => void) | null>(null);
+  /* Monotonic request id. Rounds can take anywhere from 200ms (all cache hits)
+     to 30s (waiting out a rate limit), so a slow early request can land after a
+     fast later one and overwrite it with results for criteria the recruiter has
+     already changed. Only the newest request is allowed to write state. */
+  const searchSeq = useRef(0);
 
   const say = (m: Draft<Message>) => setMessages((prev) => [...prev, { ...m, id: uid() } as Message]);
 
   const runSearch = useCallback(async (f: Filters, r: Rubric) => {
+    const seq = ++searchSeq.current;
     setBusy("search");
     setSearchError(null);
     setDirty(false);
-    const res = await search(f, r);
-    setBusy(null);
 
+    const res = await search(f, r);
+    if (seq !== searchSeq.current) return; // superseded by a newer search
+
+    setBusy(null);
     if (!res.ok) {
       setSearchError(res.error);
       retry.current = () => void runSearch(f, r);
@@ -136,7 +144,9 @@ export default function Page() {
         return;
       }
 
-      history.current = [...history.current, text].slice(-6);
+      // Kept in full. The refine route trims to a token budget and tells the
+      // model when older rounds were left out, rather than dropping them mutely.
+      history.current = [...history.current, text];
       setFilters(res.data.filters);
       setRubric(res.data.rubric);
       setReactions({});
@@ -195,9 +205,10 @@ export default function Page() {
           {dirty ? (
             <button
               onClick={() => void runSearch(filters, rubric)}
-              className="micro cursor-pointer bg-accent px-2.5 py-1.5 text-on-solid transition hover:bg-accent-ink"
+              disabled={busy !== null}
+              className="micro cursor-pointer bg-accent px-2.5 py-1.5 text-on-solid transition hover:bg-accent-ink disabled:cursor-not-allowed disabled:bg-rule disabled:text-ink-3"
             >
-              Re-run search
+              {busy === "search" ? "Searching…" : "Re-run search"}
             </button>
           ) : (
             <span className="micro text-ink-3">Editable</span>

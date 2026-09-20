@@ -8,6 +8,34 @@ import { errorResponse } from "@/lib/http";
 
 export const runtime = "nodejs";
 
+/* Feedback accumulates across a long session, but the prompt has a token budget
+   — especially on a free tier capped at 8k tokens a minute. Trimming is
+   unavoidable; trimming *silently* is the bug. A constraint the recruiter set
+   three rounds ago and still believes is in force must not simply vanish from
+   the model's view, so when older rounds are left out we say so and point at
+   where their effect already lives. */
+const HISTORY_BUDGET_CHARS = 1100;
+
+function renderHistory(history: string[]): string {
+  if (!history.length) return "";
+
+  const kept: string[] = [];
+  let used = 0;
+  for (let i = history.length - 1; i >= 0; i--) {
+    const line = `- "${history[i]}"`;
+    if (kept.length && used + line.length > HISTORY_BUDGET_CHARS) break;
+    kept.unshift(line);
+    used += line.length;
+  }
+
+  const omitted = history.length - kept.length;
+  const preface = omitted
+    ? `Earlier feedback this session, which still stands. ${omitted} earlier round${omitted === 1 ? "" : "s"} ${omitted === 1 ? "is" : "are"} not shown here, but ${omitted === 1 ? "its" : "their"} effect is already encoded in the filters and rubric above — do not undo a constraint just because you cannot see where it came from.`
+    : "Earlier feedback this session, which still stands:";
+
+  return `${preface}\n${kept.join("\n")}`;
+}
+
 const Shown = z.object({
   profile_id: z.string(),
   name: z.string(),
@@ -66,9 +94,7 @@ export async function POST(req: Request) {
     message: b.message,
     reactions,
     locked: b.locked.length ? b.locked.join(", ") : "none",
-    history: b.history.length
-      ? `Earlier feedback this session, which still stands:\n${b.history.map((h) => `- "${h}"`).join("\n")}`
-      : "",
+    history: renderHistory(b.history),
   });
 
   const result = await callLLM({ system, user, schema: RefineResult, label: "refinement", maxTokens: 2200, temperature: 0.3 });

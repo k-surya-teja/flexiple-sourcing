@@ -127,6 +127,8 @@ Every LLM call goes through one wrapper, `callLLM` in `lib/llm.ts`, which owns:
 | Schema mismatch after repair | Typed `malformed`; nothing is applied, and the raw response is viewable in the card |
 | One scoring batch fails | The round still returns. Affected profiles are listed as unscored and the UI says so |
 | Whole run overruns | A 60s scoring budget and a 70s per-call deadline; past those, partial results are returned rather than a hanging spinner |
+| Overlapping searches | A monotonic request id; only the newest search may write state, so a slow early round cannot overwrite a fast later one |
+| Long sessions | Refinement history is trimmed to a token budget, and the prompt is told how many earlier rounds were omitted and where their effect already lives |
 
 Route handlers only ever branch on a typed error. Each of the six kinds has its
 own title, explanation and next step in the UI — there is no generic toast.
@@ -250,6 +252,14 @@ get there.
 
 ### Known limits
 
+- **There is no undo.** The product is iterative by design, but a recruiter who
+  says something that makes the results worse has to talk their way back out
+  rather than step back. The architecture makes this cheap to add — refinement
+  already returns a diff and all state is client-side, so a stack of
+  `{filters, rubric}` snapshots plus the rubric-keyed score cache would make an
+  "undo last round" near-instant. It is the first thing I would build next.
+- **A recruiter cannot add a rubric criterion by hand** — only delete, reweight
+  and edit descriptions. Asymmetric, and reachable in normal use.
 - **Dark mode was originally cut and added afterwards**, outside the 3-hour box,
   at the reviewer's request. It is noted here rather than folded into the build
   time.
