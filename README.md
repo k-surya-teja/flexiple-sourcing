@@ -12,7 +12,7 @@ every round.
 
 ```bash
 npm install
-echo "GROQ_API_KEY=your_key_here" > .env.local
+cp .env.example .env.local     # then paste your key into it
 npm run dev
 ```
 
