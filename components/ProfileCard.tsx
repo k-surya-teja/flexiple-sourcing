@@ -6,6 +6,11 @@ import type { SearchResult } from "@/lib/client";
 
 const VERDICT_TONE = { strong: "strong", possible: "possible", weak: "weak" } as const;
 
+/* A dossier entry, not a card in a deck: hairline separated rows, the rank set
+   as a numeral in the margin, and the candidate's name in the display serif —
+   the one move that makes this read as something you review rather than
+   something you administer. */
+
 export function ProfileCard({
   rank,
   result,
@@ -22,106 +27,146 @@ export function ProfileCard({
   frozen?: boolean;
 }) {
   const { profile, score } = result;
-  const labelOf = (id: string) => rubric.criteria.find((c) => c.id === id)?.label ?? id;
+  const critOf = (id: string) => rubric.criteria.find((c) => c.id === id);
+  const labelOf = (id: string) => critOf(id)?.label ?? id;
+  const isNegative = (id: string) => critOf(id)?.polarity === "negative";
 
   // Only criteria whose citations survived verification are shown as met.
   const grounded = score.assessments.filter((a) => a.grounded);
-  const missing = score.assessments.filter((a) => a.met === "no");
-  const citations = grounded.flatMap((a) => a.evidence.filter((e) => e.verified)).slice(0, 4);
+
+  /* A negative criterion that was NOT met is the good outcome — the candidate
+     does not have the trait being avoided. Rendering that as a grey ✗ reads as
+     a failure, so absence of the flag is left unsaid; only a negative criterion
+     that IS met earns a chip, and it earns a warning one. */
+  const missing = score.assessments.filter((a) => a.met === "no" && !isNegative(a.criterion_id));
+
+  /* The model often cites the same phrase for several criteria. Dedupe, trim
+     long summary quotes, and cap — the citation line is evidence, not prose. */
+  const citations = (() => {
+    const seen = new Set<string>();
+    const out: { field: string; value: string }[] = [];
+    for (const e of grounded.flatMap((a) => a.evidence.filter((x) => x.verified))) {
+      const value = e.value.length > 52 ? `${e.value.slice(0, 52).trimEnd()}…` : e.value;
+      const key = `${e.field}:${value.toLowerCase()}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ field: e.field, value });
+      if (out.length === 3) break;
+    }
+    return out;
+  })();
 
   return (
     <article
-      className={`rise rounded-xl border bg-panel p-4 transition ${
+      className={`rise group relative border-b border-rule-2 py-5 pl-9 pr-1 transition-colors ${
         reaction === "yes"
-          ? "border-strong/45 ring-1 ring-strong/15"
+          ? "bg-strong-soft/40"
           : reaction === "no"
-            ? "border-line opacity-55"
-            : "border-line hover:border-line/60 hover:shadow-[0_1px_2px_rgba(20,22,28,0.04),0_6px_16px_-10px_rgba(20,22,28,0.14)]"
+            ? "opacity-45"
+            : "hover:bg-panel-2/60"
       }`}
     >
-      <div className="flex items-start gap-3">
-        <span className="mt-0.5 w-4 shrink-0 font-mono text-[12px] tabular-nums text-ink-3">{rank}</span>
+      {reaction === "yes" && <span className="absolute inset-y-0 left-0 w-[2px] bg-strong" />}
 
+      <span className="absolute left-0 top-[23px] font-mono text-[11px] tabular-nums text-ink-3">
+        {String(rank).padStart(2, "0")}
+      </span>
+
+      <div className="flex items-start justify-between gap-5">
         <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-[14.5px] font-semibold leading-tight text-ink">{profile.name}</h3>
-                <Chip tone={VERDICT_TONE[score.verdict]}>{score.verdict}</Chip>
-              </div>
-              <p className="mt-1 text-[12.5px] leading-relaxed text-ink-2">
-                {profile.current_title} · {profile.years_experience} yrs ·{" "}
-                <span className="text-ink">{profile.current_company}</span>{" "}
-                <span className="text-ink-3">({profile.current_company_type})</span> · {profile.location}
-              </p>
-            </div>
-            <ScoreBadge score={score.score} verdict={score.verdict} />
+          <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+            <h3 className="display text-[21px] leading-tight text-ink">{profile.name}</h3>
+            <Chip tone={VERDICT_TONE[score.verdict]}>{score.verdict}</Chip>
           </div>
 
-          <p className="mt-2.5 text-[13px] leading-relaxed text-ink">{score.headline}</p>
-
-          {(grounded.length > 0 || missing.length > 0) && (
-            <div className="mt-2.5 flex flex-wrap gap-1.5">
-              {grounded.map((a) => (
-                <Chip key={a.criterion_id} tone={a.met === "yes" ? "strong" : "possible"}>
-                  {a.met === "yes" ? <Icon.Check className="h-2.5 w-2.5" /> : <span className="text-[11px]">~</span>}
-                  {labelOf(a.criterion_id)}
-                </Chip>
-              ))}
-              {missing.map((a) => (
-                <Chip key={a.criterion_id} tone="weak">
-                  <Icon.Cross className="h-2.5 w-2.5 opacity-60" />
-                  {labelOf(a.criterion_id)}
-                </Chip>
-              ))}
-            </div>
-          )}
-
-          {/* The trust line: every claim above traces to a real field on this
-              profile. Claims that failed verification were dropped upstream. */}
-          {citations.length > 0 && (
-            <p className="mt-2 truncate font-mono text-[10.5px] leading-relaxed text-ink-3">
-              {citations.map((e, i) => (
-                <span key={`${e.field}-${e.value}-${i}`}>
-                  {i > 0 && <span className="mx-1 opacity-40">·</span>}
-                  {e.field}: <span className="text-ink-2">&ldquo;{e.value}&rdquo;</span>
-                </span>
-              ))}
-            </p>
-          )}
-
-          {score.claims.dropped > 0 && (
-            <p className="mt-1.5 text-[11px] text-ink-3">
-              {score.claims.dropped} unverified {score.claims.dropped === 1 ? "claim" : "claims"} hidden — the
-              model cited something this profile does not say.
-            </p>
-          )}
-
-          {!frozen && onReact && (
-            <div className="mt-3 flex items-center gap-1.5">
-              {(["yes", "no"] as const).map((r) => {
-                const active = reaction === r;
-                return (
-                  <button
-                    key={r}
-                    onClick={() => onReact(r)}
-                    className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[12px] font-medium transition ${
-                      active && r === "yes"
-                        ? "border-strong/40 bg-strong-soft text-strong"
-                        : active && r === "no"
-                          ? "border-line bg-line-2 text-ink-2"
-                          : "border-line bg-panel text-ink-3 hover:border-ink-3/40 hover:text-ink-2"
-                    }`}
-                  >
-                    {r === "yes" ? <Icon.Check className="h-3 w-3" /> : <Icon.Cross className="h-3 w-3" />}
-                    {r === "yes" ? "Match" : "Not a match"}
-                  </button>
-                );
-              })}
-            </div>
-          )}
+          <p className="mt-1.5 text-[12.5px] leading-relaxed text-ink-2">
+            {profile.current_title}
+            <span className="mx-1.5 text-rule">|</span>
+            <span className="font-mono text-[11.5px] tabular-nums">{profile.years_experience}y</span>
+            <span className="mx-1.5 text-rule">|</span>
+            <span className="text-ink">{profile.current_company}</span>{" "}
+            <span className="text-ink-3">({profile.current_company_type})</span>
+            <span className="mx-1.5 text-rule">|</span>
+            {profile.location}
+          </p>
         </div>
+
+        <ScoreBadge score={score.score} verdict={score.verdict} />
       </div>
+
+      <p className="mt-3 max-w-[64ch] text-[14px] leading-[1.55] text-ink">{score.headline}</p>
+
+      {(grounded.length > 0 || missing.length > 0) && (
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {grounded.map((a) => {
+            const neg = isNegative(a.criterion_id);
+            return (
+              <Chip
+                key={a.criterion_id}
+                tone={neg ? "danger" : a.met === "yes" ? "strong" : "possible"}
+                title={neg ? "A trait this search is trying to avoid" : undefined}
+              >
+                {neg ? <span>!</span> : a.met === "yes" ? <Icon.Check className="h-2.5 w-2.5" /> : <span>~</span>}
+                {labelOf(a.criterion_id)}
+              </Chip>
+            );
+          })}
+          {missing.map((a) => (
+            <Chip key={a.criterion_id} tone="weak">
+              <Icon.Cross className="h-2.5 w-2.5 opacity-50" />
+              {labelOf(a.criterion_id)}
+            </Chip>
+          ))}
+        </div>
+      )}
+
+      {/* The trust line: every claim above traces to a real field on this
+          profile. Claims that failed verification were dropped upstream. */}
+      {citations.length > 0 && (
+        <div className="mt-2.5 flex items-start gap-2">
+          <span className="micro mt-[3px] shrink-0 text-ink-3/70">cited</span>
+          <p className="min-w-0 font-mono text-[10.5px] leading-[1.7] text-ink-3">
+            {citations.map((e, i) => (
+              <span key={`${e.field}-${e.value}-${i}`}>
+                {i > 0 && <span className="mx-1.5 text-rule">·</span>}
+                {e.field}
+                <span className="text-ink-2">={e.value}</span>
+              </span>
+            ))}
+          </p>
+        </div>
+      )}
+
+      {score.claims.dropped > 0 && (
+        <p className="mt-2 text-[11.5px] leading-relaxed text-ink-3">
+          {score.claims.dropped} unverified {score.claims.dropped === 1 ? "claim" : "claims"} hidden — the model
+          cited something this profile does not say.
+        </p>
+      )}
+
+      {!frozen && onReact && (
+        <div className="mt-3.5 flex items-center gap-2 opacity-70 transition group-hover:opacity-100">
+          {(["yes", "no"] as const).map((r) => {
+            const active = reaction === r;
+            return (
+              <button
+                key={r}
+                onClick={() => onReact(r)}
+                className={`micro inline-flex cursor-pointer items-center gap-1.5 border px-2 py-1 transition ${
+                  active && r === "yes"
+                    ? "border-strong bg-strong text-white"
+                    : active && r === "no"
+                      ? "border-ink-3 bg-ink-3 text-white"
+                      : "border-rule bg-panel text-ink-3 hover:border-ink-3 hover:text-ink"
+                }`}
+              >
+                {r === "yes" ? <Icon.Check className="h-2.5 w-2.5" /> : <Icon.Cross className="h-2.5 w-2.5" />}
+                {r === "yes" ? "Match" : "No"}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </article>
   );
 }

@@ -11,39 +11,29 @@ export type Message =
   | { id: string; role: "assistant"; kind: "diff"; text: string; applied: AppliedOp[] }
   | { id: string; role: "assistant"; kind: "error"; error: LLMErrorShape };
 
-/** The changelog card. Rendering it is free because refinement returns a diff. */
+/** The changelog. Rendering it is free because refinement returns a diff. */
 function DiffCard({ text, applied }: { text: string; applied: AppliedOp[] }) {
-  const real = applied.filter((a) => !a.skipped);
   return (
-    <div className="rise rounded-xl border border-line bg-panel p-3">
-      <p className="text-[12.5px] leading-relaxed text-ink">{text}</p>
+    <div className="rise border border-rule bg-panel">
+      <p className="border-b border-rule-2 px-3 py-2.5 text-[12.5px] leading-[1.55] text-ink">{text}</p>
 
-      {real.length === 0 && applied.length === 0 && (
-        <p className="mt-2 rounded-lg bg-canvas px-2.5 py-2 text-[12px] leading-relaxed text-ink-3">
+      {applied.length === 0 && (
+        <p className="px-3 py-2.5 text-[12px] leading-relaxed text-ink-3">
           Nothing changed — the search already reflects that. Try being more specific about what was wrong.
         </p>
       )}
 
-      {applied.length > 0 && (
-        <ul className="mt-2.5 space-y-2">
-          {applied.map((a, i) => (
-            <li
-              key={i}
-              className={`rounded-lg border px-2.5 py-2 ${
-                a.skipped ? "border-dashed border-line bg-canvas" : "border-line bg-canvas"
-              }`}
-            >
-              <div className="flex items-start gap-1.5">
-                <Chip tone={a.skipped ? "weak" : a.target === "filter" ? "accent" : "possible"}>
-                  {a.skipped ? "skipped" : a.target}
-                </Chip>
-                <span className="mt-[3px] text-[12px] font-semibold leading-snug text-ink">{a.label}</span>
-              </div>
-              <p className="mt-1.5 text-[11.5px] leading-relaxed text-ink-2">{a.reason}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+      {applied.map((a, i) => (
+        <div key={i} className={`border-b border-rule-2 px-3 py-2.5 last:border-b-0 ${a.skipped ? "opacity-60" : ""}`}>
+          <div className="flex items-start gap-2">
+            <Chip tone={a.skipped ? "weak" : a.target === "filter" ? "accent" : "possible"}>
+              {a.skipped ? "skipped" : a.target}
+            </Chip>
+            <span className="mt-[2px] text-[12px] font-semibold leading-snug text-ink">{a.label}</span>
+          </div>
+          <p className="mt-1.5 text-[11.5px] leading-[1.55] text-ink-2">{a.reason}</p>
+        </div>
+      ))}
     </div>
   );
 }
@@ -86,16 +76,15 @@ export function ChatPanel({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex-1 space-y-2.5 overflow-y-auto px-4 py-4 scroll-thin">
+      <div className="scroll-thin flex-1 space-y-3 overflow-y-auto px-4 py-4">
         {messages.map((m) =>
           m.role === "recruiter" ? (
-            <div key={m.id} className="rise flex justify-end">
-              <p className="max-w-[88%] rounded-xl rounded-br-sm bg-accent px-3 py-2 text-[12.5px] leading-relaxed text-white">
-                {m.text}
-              </p>
+            <div key={m.id} className="rise border-l-2 border-ink pl-3">
+              <span className="micro text-ink-3">You</span>
+              <p className="mt-1 text-[12.5px] leading-[1.55] text-ink">{m.text}</p>
             </div>
           ) : m.kind === "note" ? (
-            <p key={m.id} className="rise px-0.5 text-[12.5px] leading-relaxed text-ink-2">
+            <p key={m.id} className="rise text-[12.5px] leading-[1.6] text-ink-2">
               {m.text}
             </p>
           ) : m.kind === "diff" ? (
@@ -106,28 +95,28 @@ export function ChatPanel({
         )}
 
         {busy && (
-          <div className="px-0.5 py-1">
+          <div className="py-1">
             <ThinkingLine label={busyLabel} />
           </div>
         )}
         <div ref={endRef} />
       </div>
 
-      <div className="border-t border-line bg-panel p-3">
+      <div className="border-t border-ink bg-panel p-3">
         {queued > 0 && (
-          <div className="mb-2 flex items-center justify-between gap-2 rounded-lg bg-accent-soft px-2.5 py-1.5">
-            <span className="text-[11.5px] font-medium text-accent-ink">
-              {pending.yes > 0 && `${pending.yes} marked match`}
+          <div className="mb-2 flex items-center justify-between gap-2 border border-accent/30 bg-accent-soft px-2.5 py-1.5">
+            <span className="micro text-accent-ink">
+              {pending.yes > 0 && `${pending.yes} match`}
               {pending.yes > 0 && pending.no > 0 && " · "}
-              {pending.no > 0 && `${pending.no} marked not a match`}
+              {pending.no > 0 && `${pending.no} rejected`}
             </span>
-            <button onClick={onClearPending} className="text-[11px] text-accent-ink/70 hover:text-accent-ink">
+            <button onClick={onClearPending} className="micro cursor-pointer text-accent-ink/60 hover:text-accent-ink">
               clear
             </button>
           </div>
         )}
 
-        <div className="rounded-xl border border-line bg-canvas transition focus-within:border-accent/40">
+        <div className="border border-rule bg-paper transition focus-within:border-accent">
           <textarea
             value={draft}
             rows={2}
@@ -139,26 +128,22 @@ export function ChatPanel({
                 send();
               }
             }}
-            placeholder={
-              queued > 0
-                ? "Add why, or just send the marks…"
-                : "1 is too junior, 2 and 4 are right…"
-            }
-            className="w-full resize-none bg-transparent px-3 py-2.5 text-[12.5px] leading-relaxed text-ink placeholder:text-ink-3/70 focus:outline-none disabled:opacity-60"
+            placeholder={queued > 0 ? "Add why, or just send the marks…" : "1 is too junior, 2 and 4 are right…"}
+            className="w-full resize-none bg-transparent px-3 py-2.5 text-[12.5px] leading-[1.55] text-ink placeholder:text-ink-3/60 focus:outline-none disabled:opacity-60"
           />
-          <div className="flex items-center justify-between gap-2 px-2 pb-2">
+          <div className="flex items-center justify-between gap-2 border-t border-rule-2 px-2 py-2">
             <button
               onClick={onFreeze}
               disabled={!canFreeze || busy}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1.5 text-[12px] font-medium text-ink-2 transition hover:border-ink-3/40 hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
+              className="micro inline-flex cursor-pointer items-center gap-1.5 border border-rule px-2.5 py-1.5 text-ink-2 transition hover:border-ink hover:text-ink disabled:cursor-not-allowed disabled:opacity-35"
             >
               <Icon.Freeze className="h-3 w-3" />
-              Freeze search
+              Freeze
             </button>
             <button
               onClick={send}
               disabled={busy || (!draft.trim() && !queued)}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-[12.5px] font-semibold text-white transition hover:bg-accent-ink disabled:cursor-not-allowed disabled:opacity-35"
+              className="micro inline-flex cursor-pointer items-center gap-1.5 bg-accent px-3 py-1.5 text-white transition hover:bg-accent-ink disabled:cursor-not-allowed disabled:opacity-30"
             >
               Refine
               <Icon.Arrow className="h-3 w-3" />

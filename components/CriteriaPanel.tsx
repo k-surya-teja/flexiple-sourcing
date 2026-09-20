@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Chip, Icon, SectionLabel, WeightDots } from "./Primitives";
+import { Chip, Icon, RuleLabel, WeightDots } from "./Primitives";
 import type { CompanyType, Filters, Rubric } from "@/lib/schemas";
 import type { LockKey } from "@/lib/ops";
 import type { PoolInfo } from "@/lib/client";
@@ -49,7 +49,7 @@ function TokenField({
             if (e.key === "Backspace" && !draft && values.length) onChange(values.slice(0, -1));
           }}
           placeholder={values.length ? "+" : placeholder}
-          className="min-w-[70px] flex-1 bg-transparent py-0.5 text-[12.5px] text-ink placeholder:text-ink-3/60 focus:outline-none"
+          className="min-w-[64px] flex-1 bg-transparent py-0.5 text-[12.5px] text-ink placeholder:text-ink-3/60 focus:outline-none"
         />
       )}
       {disabled && !values.length && <span className="text-[12.5px] text-ink-3">—</span>}
@@ -72,16 +72,19 @@ function Row({
 }) {
   const isLocked = lockKey ? locked?.has(lockKey) : false;
   return (
-    <div className="grid grid-cols-[104px_1fr] items-start gap-3 py-2.5">
-      <div className="flex items-center gap-1 pt-0.5">
-        <span className="text-[12px] font-medium text-ink-3">{label}</span>
+    <div className="grid grid-cols-[88px_1fr] items-start gap-3 border-b border-rule-2 py-2.5 last:border-b-0">
+      <div className="flex items-center gap-1 pt-[3px]">
+        <span className="micro text-ink-3">{label}</span>
         {isLocked && (
           <span title="You edited this. Refinement will not overwrite it." className="text-accent">
             <Icon.Lock className="h-3 w-3" />
           </span>
         )}
         {!!eliminated && (
-          <span title={`This clause alone removes ${eliminated} profiles`} className="font-mono text-[10px] text-ink-3/70">
+          <span
+            title={`This clause alone removes ${eliminated} profiles`}
+            className="font-mono text-[9.5px] tabular-nums text-ink-3/60"
+          >
             −{eliminated}
           </span>
         )}
@@ -112,21 +115,21 @@ export function CriteriaPanel({
   const elim = (k: FilterKey) => pool?.eliminatedBy?.[k] ?? 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <section>
-        <SectionLabel
+        <RuleLabel
           right={
             pool && (
-              <span className="font-mono text-[11px] tabular-nums text-ink-3">
-                {pool.matched}/{pool.totalPool} match
+              <span className="font-mono text-[10.5px] tabular-nums text-ink-2">
+                {pool.matched}/{pool.totalPool}
               </span>
             )
           }
         >
           Objective filters
-        </SectionLabel>
+        </RuleLabel>
 
-        <div className="rounded-xl border border-line bg-panel px-3.5 py-1 divide-y divide-line-2">
+        <div className="border border-rule bg-panel px-3">
           <Row label="Experience" lockKey="years_experience" locked={locked} eliminated={elim("years_experience")}>
             <div className="flex items-center gap-1.5 text-[12.5px]">
               {(["min", "max"] as const).map((k, i) => (
@@ -150,11 +153,11 @@ export function CriteriaPanel({
                         "years_experience",
                       )
                     }
-                    className="w-14 rounded-md border border-line bg-canvas px-2 py-1 font-mono tabular-nums text-ink focus:border-accent/45 focus:outline-none disabled:opacity-70"
+                    className="w-12 border border-rule bg-paper px-1.5 py-1 font-mono text-[12px] tabular-nums text-ink focus:border-accent focus:outline-none disabled:opacity-70"
                   />
                 </div>
               ))}
-              <span className="text-ink-3">years</span>
+              <span className="micro text-ink-3">yrs</span>
             </div>
           </Row>
 
@@ -207,8 +210,10 @@ export function CriteriaPanel({
                           "company_background",
                         )
                       }
-                      className={`rounded-md px-2 py-[3px] text-[12px] font-medium capitalize transition ${
-                        on ? "bg-accent-soft text-accent-ink" : "bg-line-2 text-ink-3 hover:text-ink-2"
+                      className={`micro cursor-pointer border px-1.5 py-[3px] transition ${
+                        on
+                          ? "border-accent bg-accent text-white"
+                          : "border-rule bg-panel text-ink-3 hover:border-ink-3 hover:text-ink-2"
                       } disabled:cursor-default`}
                     >
                       {t}
@@ -217,21 +222,18 @@ export function CriteriaPanel({
                 })}
               </div>
               {filters.company_background.types.length > 0 && (
-                <div className="flex gap-1 rounded-md bg-line-2 p-0.5 text-[11.5px]">
+                <div className="flex border border-rule">
                   {(["any", "current"] as const).map((s) => (
                     <button
                       key={s}
                       disabled={frozen}
                       onClick={() =>
-                        set(
-                          { company_background: { ...filters.company_background, scope: s } },
-                          "company_background",
-                        )
+                        set({ company_background: { ...filters.company_background, scope: s } }, "company_background")
                       }
-                      className={`flex-1 rounded px-2 py-1 font-medium transition ${
+                      className={`micro flex-1 cursor-pointer px-2 py-1.5 transition ${
                         filters.company_background.scope === s
-                          ? "bg-panel text-ink shadow-sm"
-                          : "text-ink-3 hover:text-ink-2"
+                          ? "bg-ink text-white"
+                          : "bg-panel text-ink-3 hover:text-ink-2"
                       }`}
                     >
                       {s === "any" ? "Current or past" : "Current only"}
@@ -254,19 +256,19 @@ export function CriteriaPanel({
       </section>
 
       <section>
-        <SectionLabel
-          right={<span className="font-mono text-[11px] text-ink-3">{rubric.criteria.length} criteria</span>}
+        <RuleLabel
+          right={<span className="font-mono text-[10.5px] tabular-nums text-ink-2">{rubric.criteria.length}</span>}
         >
           Fit rubric
-        </SectionLabel>
+        </RuleLabel>
 
-        <p className="mb-2.5 rounded-lg border border-line bg-accent-soft/45 px-3 py-2 text-[12.5px] italic leading-relaxed text-accent-ink">
+        <p className="display mb-3 border-l-2 border-accent pl-3 text-[15px] italic leading-[1.45] text-ink-2">
           {rubric.role_summary}
         </p>
 
-        <div className="space-y-1.5">
+        <div className="border border-rule bg-panel">
           {rubric.criteria.map((c) => (
-            <div key={c.id} className="group rounded-xl border border-line bg-panel px-3.5 py-2.5">
+            <div key={c.id} className="group border-b border-rule-2 px-3 py-2.5 last:border-b-0">
               <div className="flex items-start justify-between gap-2">
                 <span className="text-[13px] font-semibold leading-snug text-ink">
                   {c.label}
@@ -291,10 +293,8 @@ export function CriteriaPanel({
                   />
                   {!frozen && (
                     <button
-                      onClick={() =>
-                        onRubric({ ...rubric, criteria: rubric.criteria.filter((x) => x.id !== c.id) })
-                      }
-                      className="rounded p-0.5 text-ink-3 opacity-0 transition hover:text-danger group-hover:opacity-100"
+                      onClick={() => onRubric({ ...rubric, criteria: rubric.criteria.filter((x) => x.id !== c.id) })}
+                      className="cursor-pointer p-0.5 text-ink-3 opacity-0 transition hover:text-danger group-hover:opacity-100"
                       aria-label={`Remove ${c.label}`}
                     >
                       <Icon.Cross className="h-3 w-3" />
@@ -306,6 +306,13 @@ export function CriteriaPanel({
                 value={c.description}
                 readOnly={frozen}
                 rows={2}
+                ref={(el) => {
+                  // Grow to fit: a criterion clipped mid-sentence is unreadable.
+                  if (el) {
+                    el.style.height = "auto";
+                    el.style.height = `${el.scrollHeight}px`;
+                  }
+                }}
                 onChange={(e) =>
                   onRubric({
                     ...rubric,
@@ -314,7 +321,7 @@ export function CriteriaPanel({
                     ),
                   })
                 }
-                className="mt-1 w-full resize-none bg-transparent text-[12.5px] leading-relaxed text-ink-2 focus:outline-none"
+                className="mt-1 w-full resize-none bg-transparent text-[12px] leading-[1.55] text-ink-2 focus:outline-none"
               />
             </div>
           ))}

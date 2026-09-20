@@ -1,52 +1,104 @@
 @import "tailwindcss";
 
+/* ───────────────────────────────────────────────────────────────────────
+   Editorial dossier.
+
+   Sourcing is reading about people, so the interface borrows from print
+   archives rather than from SaaS dashboards: warm paper rather than cool
+   grey, a serif for names, mono for anything measured, hairline rules
+   instead of boxed cards, and square corners throughout. One saturated
+   accent — vermillion — carries every action.
+   ─────────────────────────────────────────────────────────────────────── */
+
 @theme {
-  --color-canvas: #f7f7f9;
-  --color-panel: #ffffff;
-  --color-ink: #14161c;
-  --color-ink-2: #474c59;
-  --color-ink-3: #767d8c;
-  --color-line: #e6e7ec;
-  --color-line-2: #f0f1f4;
+  /* Ground */
+  --color-paper: #f2efe7;
+  --color-panel: #fbfaf6;
+  --color-panel-2: #f7f5ef;
 
-  --color-accent: #4338ca;
-  --color-accent-soft: #eef0fd;
-  --color-accent-ink: #3730a3;
+  /* Ink */
+  --color-ink: #1a1814;
+  --color-ink-2: #4e4940;
+  --color-ink-3: #676052;
+  --color-rule: #ded8ca;
+  --color-rule-2: #eae5d9;
 
-  --color-strong: #047857;
-  --color-strong-soft: #e7f5ef;
-  --color-possible: #a15c07;
-  --color-possible-soft: #fdf3e2;
-  --color-weak: #64748b;
-  --color-weak-soft: #f1f3f6;
+  /* Single accent */
+  --color-accent: #b4400f;
+  --color-accent-ink: #8f3209;
+  --color-accent-soft: #f8e9e0;
 
-  --color-danger: #b42318;
-  --color-danger-soft: #fdf0ee;
+  /* Verdicts — earthy, so they sit on paper rather than glow on it */
+  --color-strong: #2c6e49;
+  --color-strong-soft: #e6efe7;
+  --color-possible: #745712;
+  --color-possible-soft: #f4eddc;
+  --color-weak: #5e5a52;
+  --color-weak-soft: #edeae1;
+
+  --color-danger: #8c1d18;
+  --color-danger-soft: #f7e6e3;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), Georgia, "Times New Roman", serif;
   --font-mono: var(--font-mono-face), ui-monospace, SFMono-Regular, monospace;
 }
 
 * {
-  border-color: var(--color-line);
+  border-color: var(--color-rule);
 }
 
 html,
 body {
-  background: var(--color-canvas);
+  background: var(--color-paper);
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
+/* Barely-there paper tooth. Invisible as texture, present as warmth. */
 body {
-  font-feature-settings: "cv11", "ss01";
+  background-image: radial-gradient(rgba(26, 24, 20, 0.022) 1px, transparent 0);
+  background-size: 3px 3px;
 }
 
-/* Deliberate motion: content arrives, it does not pop. */
+/* ─── Editorial type utilities ─── */
+
+/* Mono, uppercase, letterspaced: every label, field name and section head. */
+.micro {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+/* A rule with a word sitting on it — the section divider of the whole app. */
+.rule-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rule-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-rule);
+}
+
+/* ─── Motion: content settles, it does not bounce ─── */
+
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(5px);
   }
   to {
     opacity: 1;
@@ -54,7 +106,7 @@ body {
   }
 }
 .rise {
-  animation: rise 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: rise 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes shimmer {
@@ -65,22 +117,22 @@ body {
 .shimmer {
   position: relative;
   overflow: hidden;
-  background: var(--color-line-2);
+  background: var(--color-rule-2);
 }
 .shimmer::after {
   content: "";
   position: absolute;
   inset: 0;
   transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
-  animation: shimmer 1.5s infinite;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+  animation: shimmer 1.6s infinite;
 }
 
 @keyframes pulse-dot {
   0%,
   100% {
-    opacity: 0.25;
-    transform: scale(0.8);
+    opacity: 0.22;
+    transform: scale(0.75);
   }
   50% {
     opacity: 1;
@@ -91,18 +143,26 @@ body {
   animation: pulse-dot 1.1s ease-in-out infinite;
 }
 
+/* ─── Focus ───
+   Buttons and links get a ring. Text inputs deliberately do not: they live
+   inside bordered containers that already take a focus-within treatment, and
+   stacking the two reads as an error state rather than as focus. */
+:where(button, a, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 .scroll-thin::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
 }
 .scroll-thin::-webkit-scrollbar-thumb {
-  background: #d7d9e0;
-  border-radius: 99px;
+  background: #cfc8b8;
   border: 3px solid transparent;
   background-clip: content-box;
 }
 .scroll-thin::-webkit-scrollbar-thumb:hover {
-  background: #bfc2cc;
+  background: #b9b1a0;
   background-clip: content-box;
 }
 .scroll-thin::-webkit-scrollbar-track {

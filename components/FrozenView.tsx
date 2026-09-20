@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CriteriaPanel } from "./CriteriaPanel";
 import { ProfileCard } from "./ProfileCard";
-import { Icon } from "./Primitives";
+import { Icon, RuleLabel } from "./Primitives";
 import type { Filters, Rubric } from "@/lib/schemas";
 import type { PoolInfo, SearchResult } from "@/lib/client";
 
@@ -44,49 +44,60 @@ export function FrozenView({
   };
 
   return (
-    <main className="min-h-screen">
-      <header className="border-b border-line bg-panel">
-        <div className="mx-auto max-w-6xl px-6 py-7">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="min-w-0">
-              <div className="mb-2.5 inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-2.5 py-1 text-[11.5px] font-semibold text-accent-ink">
-                <Icon.Freeze className="h-3 w-3" />
-                Search frozen
-              </div>
-              <h1 className="max-w-2xl text-[20px] font-semibold leading-snug tracking-[-0.01em] text-ink">
-                &ldquo;{query}&rdquo;
-              </h1>
-              <p className="mt-1.5 text-[13px] text-ink-2">
-                {results.length} ranked {results.length === 1 ? "candidate" : "candidates"}
-                {pool && ` from ${pool.matched} who cleared the filters, out of ${pool.totalPool} indexed`} ·{" "}
-                {rounds} refinement {rounds === 1 ? "round" : "rounds"}
-              </p>
-            </div>
-            <div className="flex shrink-0 gap-2">
-              <button
-                onClick={copy}
-                className="rounded-lg border border-line bg-panel px-3 py-2 text-[12.5px] font-medium text-ink-2 transition hover:border-ink-3/40 hover:text-ink"
-              >
-                {copied ? "Copied" : "Copy shortlist"}
-              </button>
-              <button
-                onClick={onReopen}
-                className="rounded-lg border border-line bg-panel px-3 py-2 text-[12.5px] font-medium text-ink-2 transition hover:border-ink-3/40 hover:text-ink"
-              >
-                Keep refining
-              </button>
-              <button
-                onClick={onRestart}
-                className="rounded-lg bg-accent px-3 py-2 text-[12.5px] font-semibold text-white transition hover:bg-accent-ink"
-              >
-                New search
-              </button>
-            </div>
-          </div>
-        </div>
+    <main className="mx-auto min-h-screen max-w-6xl px-8 py-10">
+      {/* Masthead */}
+      <header className="flex items-baseline gap-3 border-b border-ink pb-2.5">
+        <span className="display text-[17px] leading-none text-ink">Flexiple</span>
+        <span className="micro text-ink-3">Sourcing</span>
+        <span className="flex-1" />
+        <span className="micro text-accent">Frozen</span>
       </header>
 
-      <div className="mx-auto grid max-w-6xl gap-8 px-6 py-8 lg:grid-cols-[360px_1fr]">
+      <div className="rise flex flex-wrap items-end justify-between gap-6 border-b-2 border-ink py-8">
+        <div className="min-w-0 max-w-3xl">
+          <p className="micro mb-3 text-ink-3">Final shortlist</p>
+          <h1 className="display text-[36px] leading-[1.06] text-ink">&ldquo;{query}&rdquo;</h1>
+          <p className="mt-3.5 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11px] text-ink-2">
+            <span>{results.length} ranked</span>
+            {pool && (
+              <>
+                <span className="text-rule">/</span>
+                <span>{pool.matched} cleared filters</span>
+                <span className="text-rule">/</span>
+                <span>{pool.totalPool} indexed</span>
+              </>
+            )}
+            <span className="text-rule">/</span>
+            <span>
+              {rounds} refinement {rounds === 1 ? "round" : "rounds"}
+            </span>
+          </p>
+        </div>
+
+        <div className="flex shrink-0 gap-2">
+          <button
+            onClick={copy}
+            className="micro cursor-pointer border border-rule bg-panel px-3 py-2 text-ink-2 transition hover:border-ink hover:text-ink"
+          >
+            {copied ? "Copied" : "Copy shortlist"}
+          </button>
+          <button
+            onClick={onReopen}
+            className="micro inline-flex cursor-pointer items-center gap-1.5 border border-rule bg-panel px-3 py-2 text-ink-2 transition hover:border-ink hover:text-ink"
+          >
+            <Icon.Freeze className="h-3 w-3" />
+            Keep refining
+          </button>
+          <button
+            onClick={onRestart}
+            className="micro cursor-pointer bg-accent px-3 py-2 text-white transition hover:bg-accent-ink"
+          >
+            New search
+          </button>
+        </div>
+      </div>
+
+      <div className="grid gap-10 py-8 lg:grid-cols-[320px_1fr]">
         <aside className="lg:sticky lg:top-8 lg:self-start">
           <CriteriaPanel
             filters={filters}
@@ -100,19 +111,17 @@ export function FrozenView({
         </aside>
 
         <section>
-          <h2 className="mb-2.5 text-[11px] font-semibold uppercase tracking-[0.07em] text-ink-3">
-            Final ranked shortlist
-          </h2>
-          <div className="space-y-2.5">
+          <RuleLabel>Ranked candidates</RuleLabel>
+          <div className="border-t border-ink">
             {results.map((r, i) => (
               <ProfileCard key={r.profile.id} rank={i + 1} result={r} rubric={rubric} frozen />
             ))}
-            {results.length === 0 && (
-              <p className="rounded-xl border border-line bg-panel px-5 py-8 text-center text-[13px] text-ink-2">
-                This search was frozen with no matching profiles.
-              </p>
-            )}
           </div>
+          {results.length === 0 && (
+            <p className="border border-rule bg-panel px-6 py-10 text-center text-[13px] text-ink-2">
+              This search was frozen with no matching profiles.
+            </p>
+          )}
         </section>
       </div>
     </main>

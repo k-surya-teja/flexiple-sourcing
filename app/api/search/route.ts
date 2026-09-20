@@ -2,14 +2,16 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { allProfiles } from "@/lib/pool";
 import { applyFilters } from "@/lib/filter";
+import { prerank } from "@/lib/prerank";
 import { scoreProfiles } from "@/lib/score";
 import { Filters, Rubric } from "@/lib/schemas";
 import { errorResponse } from "@/lib/http";
 
 export const runtime = "nodejs";
 
-/** Keeps a wide search from turning into a 40-second wait. Surfaced in the UI
-    rather than hidden, so the recruiter knows the list is not the whole pool. */
+/** Keeps a wide search from turning into a 40-second wait, and keeps the round
+    inside the account's token-per-minute budget. Surfaced in the UI rather than
+    hidden, so the recruiter knows the list is not the whole pool. */
 const MAX_SCORED = 15;
 
 const Body = z.object({ filters: Filters, rubric: Rubric });
@@ -37,7 +39,9 @@ export async function POST(req: Request) {
     });
   }
 
-  const toScore = outcome.matched.slice(0, MAX_SCORED);
+  /* Order by rubric relevance BEFORE truncating. Dataset order would hand the
+     model the wrong 15 whenever the filters are loose. */
+  const toScore = prerank(outcome.matched, filters, rubric).slice(0, MAX_SCORED);
   const run = await scoreProfiles(toScore, rubric);
 
   // Every batch failed — there is nothing to show, so this is a real error.

@@ -59,6 +59,20 @@ BROWSER (owns session state)                SERVER (stateless + score cache)
 
 ### The five decisions that shaped this
 
+**0. Relevance ordering before truncation.**
+Only 15 profiles can be scored per round (see the token budget section). Taking
+the first 15 in dataset order turns out to be quietly catastrophic when the
+filters are loose: "senior frontend engineers who have owned a design system"
+generates no hard skill filter — correctly, since that is a judgement, not a
+constraint — so 38 profiles survive, and the first 15 happen to be backend
+engineers. Before the fix, that search returned a confidently ranked list of
+backend engineers scoring 15/100 and never scored a single frontend candidate.
+`lib/prerank.ts` now orders survivors by a cheap lexical match against the
+rubric the LLM just wrote, then truncates. Same query, after: Staff Frontend
+Engineer at 78, Senior Frontend Engineer at 75. It is pure code, costs nothing,
+and never judges quality — it only decides who is worth spending a scoring token
+on. The LLM still does all the judging.
+
 **1. Filters are code. Scoring is the LLM. They never mix.**
 `lib/filter.ts` is a pure function — no network, instant, deterministic. The LLM
 *writes* filters but never *applies* them. This is also the honest shape for 98M
@@ -168,6 +182,28 @@ so they can be edited without restarting.
 **Time box: 3 hours.** Roughly 55 minutes on the engine, 50 on the interface,
 the rest on the dataset, verification and this document.
 
+### The interface
+
+The visual direction is deliberately not SaaS-dashboard. Sourcing is reading
+about people, so the interface borrows from print archives: warm paper rather
+than cool grey, a display serif on candidate names, monospace for anything
+measured, hairline rules instead of boxed cards, square corners, and a single
+saturated accent. A candidate entry is laid out as a dossier row with the rank
+set as a numeral in the margin — the intent is something a recruiter reviews,
+not something they administer.
+
+Two details that are function rather than decoration:
+
+- **The `cited` line under every explanation** shows the actual profile field and
+  value each claim came from. It is the verification result made visible.
+- **Negative-polarity criteria only appear when they are triggered.** A criterion
+  the search is trying to *avoid*, when not met, is the good outcome; rendering
+  it as a grey ✗ alongside genuine misses read as failure, so absence of the flag
+  is left unsaid.
+
+All twelve foreground/background pairs in the palette were checked and pass WCAG
+AA at 4.5:1 for normal text.
+
 ### Prioritised
 
 - **The refinement loop responding visibly and traceably.** This is the thing the
@@ -183,8 +219,8 @@ the rest on the dataset, verification and this document.
 
 ### Cut, deliberately
 
-- **Dark mode.** Doubles the design surface. Light mode executed properly beats two
-  themes executed adequately in a 3-hour box.
+- **Dark mode.** Doubles the design surface. One mode executed properly beats two
+  executed adequately in a 3-hour box.
 - **Streaming / token-by-token output.** The two-step `analyze` → `search` split
   already removes the worst of the wait: criteria render in about a second while
   scoring runs behind them. Streaming would have added real complexity for a

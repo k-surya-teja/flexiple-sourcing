@@ -32,8 +32,8 @@ export function ResultsPanel({
 
   if (busy) {
     return (
-      <div className="space-y-2.5">
-        <div className="pb-1">
+      <div>
+        <div className="border-b border-rule pb-3">
           <ThinkingLine label="Scoring the shortlist against your rubric" />
         </div>
         {[0, 1, 2, 3].map((i) => (
@@ -54,17 +54,20 @@ export function ResultsPanel({
       .sort((a, b) => b[1] - a[1])[0];
 
     return (
-      <div className="rise rounded-xl border border-line bg-panel px-6 py-10 text-center">
-        <p className="text-[14.5px] font-semibold text-ink">Nobody clears these filters</p>
-        <p className="mx-auto mt-1.5 max-w-sm text-[13px] leading-relaxed text-ink-2">
-          All {data.pool.totalPool} profiles were eliminated, so there was nothing to score and no reason to
-          call the model.
+      <div className="rise border border-rule bg-panel px-8 py-14 text-center">
+        <p className="display text-[26px] leading-tight text-ink">Nobody clears these filters</p>
+        <p className="mx-auto mt-2.5 max-w-[46ch] text-[13.5px] leading-[1.6] text-ink-2">
+          All {data.pool.totalPool} profiles were eliminated, so there was nothing to score and no reason to call
+          the model.
         </p>
         {worst && (
-          <p className="mx-auto mt-3 max-w-sm rounded-lg bg-canvas px-3 py-2.5 text-[12.5px] leading-relaxed text-ink-2">
-            <span className="font-semibold text-ink">{FILTER_LABELS[worst[0]]}</span> is the most expensive
-            clause on its own — it removes {worst[1]} of {data.pool.totalPool}. Loosening it on the left, or
-            saying so in the chat, is the fastest way back.
+          <p className="mx-auto mt-5 max-w-[48ch] border-l-2 border-accent bg-paper py-3 pl-4 pr-4 text-left text-[12.5px] leading-[1.6] text-ink-2">
+            <span className="micro block text-accent">Most expensive clause</span>
+            <span className="mt-1.5 block">
+              <span className="font-semibold text-ink">{FILTER_LABELS[worst[0]]}</span> removes {worst[1]} of{" "}
+              {data.pool.totalPool} on its own. Loosening it on the left, or saying so in the chat, is the fastest
+              way back.
+            </span>
           </p>
         )}
       </div>
@@ -74,21 +77,28 @@ export function ResultsPanel({
   const shown = showAll ? data.results : data.results.slice(0, PAGE);
 
   return (
-    <div className="space-y-2.5">
+    <div>
       {data.degraded && (
-        <div className="rounded-xl border border-possible/30 bg-possible-soft px-3.5 py-2.5 text-[12.5px] leading-relaxed text-possible">
-          <span className="font-semibold">Partial results.</span> {data.degraded.message} {data.unscored.length}{" "}
-          {data.unscored.length === 1 ? "profile is" : "profiles are"} missing from this ranking; everything
-          shown below was scored normally.
+        <div className="mb-3 border-l-2 border-possible bg-possible-soft px-3.5 py-2.5">
+          <span className="micro text-possible">Partial results</span>
+          <p className="mt-1 text-[12.5px] leading-relaxed text-ink-2">
+            {data.degraded.message} {data.unscored.length}{" "}
+            {data.unscored.length === 1 ? "profile is" : "profiles are"} missing from this ranking; everything
+            below was scored normally.
+          </p>
         </div>
       )}
 
-      {data.truncated > 0 && (
-        <p className="px-0.5 text-[12px] leading-relaxed text-ink-3">
-          {data.pool.matched} profiles clear your filters. The top {data.results.length} were scored —
-          tighten the filters on the left to bring the rest into range.
-        </p>
-      )}
+      <div className="flex items-baseline justify-between gap-3 border-b border-ink pb-2">
+        <span className="micro text-ink">
+          Ranked · {data.results.length} scored
+        </span>
+        {data.truncated > 0 && (
+          <span className="font-mono text-[10.5px] text-ink-3">
+            {data.pool.matched} clear filters · top {data.results.length} scored
+          </span>
+        )}
+      </div>
 
       {shown.map((r, i) => (
         <ProfileCard
@@ -105,7 +115,7 @@ export function ResultsPanel({
       {data.results.length > PAGE && (
         <button
           onClick={() => setShowAll((s) => !s)}
-          className="w-full rounded-xl border border-dashed border-line bg-panel/60 py-2.5 text-[12.5px] font-medium text-ink-3 transition hover:border-accent/35 hover:text-accent-ink"
+          className="micro mt-3 w-full cursor-pointer border border-dashed border-rule py-3 text-ink-3 transition hover:border-accent hover:text-accent"
         >
           {showAll ? "Show top 5 only" : `Show all ${data.results.length} scored profiles`}
         </button>
