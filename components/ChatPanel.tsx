@@ -143,7 +143,7 @@ export function ChatPanel({
             <button
               onClick={send}
               disabled={busy || (!draft.trim() && !queued)}
-              className="micro inline-flex cursor-pointer items-center gap-1.5 bg-accent px-3 py-1.5 text-white transition hover:bg-accent-ink disabled:cursor-not-allowed disabled:opacity-30"
+              className="micro inline-flex cursor-pointer items-center gap-1.5 bg-accent px-3 py-1.5 text-on-solid transition hover:bg-accent-ink disabled:cursor-not-allowed disabled:opacity-30"
             >
               Refine
               <Icon.Arrow className="h-3 w-3" />

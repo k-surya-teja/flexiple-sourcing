@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CriteriaPanel } from "./CriteriaPanel";
 import { ProfileCard } from "./ProfileCard";
 import { Icon, RuleLabel } from "./Primitives";
+import { ThemeToggle } from "./ThemeToggle";
 import type { Filters, Rubric } from "@/lib/schemas";
 import type { PoolInfo, SearchResult } from "@/lib/client";
 
@@ -51,6 +52,7 @@ export function FrozenView({
         <span className="micro text-ink-3">Sourcing</span>
         <span className="flex-1" />
         <span className="micro text-accent">Frozen</span>
+        <ThemeToggle />
       </header>
 
       <div className="rise flex flex-wrap items-end justify-between gap-6 border-b-2 border-ink py-8">
@@ -90,7 +92,7 @@ export function FrozenView({
           </button>
           <button
             onClick={onRestart}
-            className="micro cursor-pointer bg-accent px-3 py-2 text-white transition hover:bg-accent-ink"
+            className="micro cursor-pointer bg-accent px-3 py-2 text-on-solid transition hover:bg-accent-ink"
           >
             New search
           </button>

@@ -212,7 +212,7 @@ export function CriteriaPanel({
                       }
                       className={`micro cursor-pointer border px-1.5 py-[3px] transition ${
                         on
-                          ? "border-accent bg-accent text-white"
+                          ? "border-accent bg-accent text-on-solid"
                           : "border-rule bg-panel text-ink-3 hover:border-ink-3 hover:text-ink-2"
                       } disabled:cursor-default`}
                     >
@@ -232,7 +232,7 @@ export function CriteriaPanel({
                       }
                       className={`micro flex-1 cursor-pointer px-2 py-1.5 transition ${
                         filters.company_background.scope === s
-                          ? "bg-ink text-white"
+                          ? "bg-ink text-on-solid"
                           : "bg-panel text-ink-3 hover:text-ink-2"
                       }`}
                     >

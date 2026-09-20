@@ -154,9 +154,9 @@ export function ProfileCard({
                 onClick={() => onReact(r)}
                 className={`micro inline-flex cursor-pointer items-center gap-1.5 border px-2 py-1 transition ${
                   active && r === "yes"
-                    ? "border-strong bg-strong text-white"
+                    ? "border-strong bg-strong text-on-solid"
                     : active && r === "no"
-                      ? "border-ink-3 bg-ink-3 text-white"
+                      ? "border-ink-3 bg-ink-3 text-on-solid"
                       : "border-rule bg-panel text-ink-3 hover:border-ink-3 hover:text-ink"
                 }`}
               >

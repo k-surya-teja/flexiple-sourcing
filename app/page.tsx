@@ -7,6 +7,7 @@ import { ResultsPanel } from "@/components/ResultsPanel";
 import { ChatPanel, type Message } from "@/components/ChatPanel";
 import { FrozenView } from "@/components/FrozenView";
 import { Icon } from "@/components/Primitives";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { analyze, refine, search, type LLMErrorShape, type SearchResponse } from "@/lib/client";
 import type { Filters, Rubric } from "@/lib/schemas";
 import type { LockKey } from "@/lib/ops";
@@ -194,7 +195,7 @@ export default function Page() {
           {dirty ? (
             <button
               onClick={() => void runSearch(filters, rubric)}
-              className="micro cursor-pointer bg-accent px-2.5 py-1.5 text-white transition hover:bg-accent-ink"
+              className="micro cursor-pointer bg-accent px-2.5 py-1.5 text-on-solid transition hover:bg-accent-ink"
             >
               Re-run search
             </button>
@@ -233,14 +234,17 @@ export default function Page() {
               )}
             </p>
           </div>
-          <button
-            onClick={() => setPhase("frozen")}
-            disabled={!results || busy !== null}
-            className="micro inline-flex shrink-0 cursor-pointer items-center gap-1.5 border border-rule bg-panel px-3 py-2 text-ink-2 transition hover:border-ink hover:text-ink disabled:opacity-35"
-          >
-            <Icon.Freeze className="h-3 w-3" />
-            Freeze
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={() => setPhase("frozen")}
+              disabled={!results || busy !== null}
+              className="micro inline-flex cursor-pointer items-center gap-1.5 border border-rule bg-panel px-3 py-2 text-ink-2 transition hover:border-ink hover:text-ink disabled:opacity-35"
+            >
+              <Icon.Freeze className="h-3 w-3" />
+              Freeze
+            </button>
+          </div>
         </div>
 
         <div className="px-7 py-5">

@@ -201,8 +201,23 @@ Two details that are function rather than decoration:
   it as a grey ✗ alongside genuine misses read as failure, so absence of the flag
   is left unsaid.
 
-All twelve foreground/background pairs in the palette were checked and pass WCAG
-AA at 4.5:1 for normal text.
+**Dark mode** is a full second palette rather than an inversion: the ground stays
+warm (`#14120e`, not a neutral charcoal) so the paper character survives, and the
+accent lightens to `#e2703f` so it still reads against a dark field. Because the
+accent lightens, white text on a solid fill would fail contrast there — so every
+solid brand fill takes its text from one `--color-on-solid` token that flips with
+the theme.
+
+The toggle has three states, not two: most people never touch it and should
+follow the OS, so *system* has to be a real, returnable state rather than an
+implicit starting position. Only an explicit choice writes `data-theme`; the
+system case is handled by the media query alone. A small inline script applies a
+stored choice before first paint, so an explicit dark preference never flashes
+light.
+
+All twelve foreground/background pairs were checked in **both** palettes and pass
+WCAG AA at 4.5:1 for normal text. Three light-mode tones had to be darkened to
+get there.
 
 ### Prioritised
 
@@ -219,8 +234,6 @@ AA at 4.5:1 for normal text.
 
 ### Cut, deliberately
 
-- **Dark mode.** Doubles the design surface. One mode executed properly beats two
-  executed adequately in a 3-hour box.
 - **Streaming / token-by-token output.** The two-step `analyze` → `search` split
   already removes the worst of the wait: criteria render in about a second while
   scoring runs behind them. Streaming would have added real complexity for a
@@ -237,6 +250,9 @@ AA at 4.5:1 for normal text.
 
 ### Known limits
 
+- **Dark mode was originally cut and added afterwards**, outside the 3-hour box,
+  at the reviewer's request. It is noted here rather than folded into the build
+  time.
 - **A profile the recruiter explicitly approved can still slip down the ranking.**
   In testing, adding two weight-5 criteria on top of five existing ones compressed
   the score range and moved an approved profile from #3 to #6. Scores are produced

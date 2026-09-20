@@ -23,6 +23,11 @@
   --color-rule: #ded8ca;
   --color-rule-2: #eae5d9;
 
+  /* Text that sits on a solid brand fill (accent, ink, strong, danger).
+     One token because the accent lightens in dark mode, where white would
+     fail contrast and the warm near-black passes. */
+  --color-on-solid: #ffffff;
+
   /* Single accent */
   --color-accent: #b4400f;
   --color-accent-ink: #8f3209;
@@ -44,6 +49,70 @@
   --font-mono: var(--font-mono-face), ui-monospace, SFMono-Regular, monospace;
 }
 
+/* ─── Dark: the same paper, at night ───
+   Not a neutral charcoal inversion. The ground keeps its warmth so the
+   editorial character survives, and the accent lightens so it still reads
+   against a dark field. Both blocks carry identical values: the media query
+   handles the default "system" setting, the attribute selector handles an
+   explicit choice, and the :not() guard lets an explicit "light" win over a
+   dark system preference. */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-paper: #14120e;
+    --color-panel: #1b1814;
+    --color-panel-2: #211d18;
+
+    --color-ink: #f0ebe0;
+    --color-ink-2: #bcb4a6;
+    --color-ink-3: #948b7d;
+    --color-rule: #332e26;
+    --color-rule-2: #272319;
+
+    --color-on-solid: #14120e;
+    --color-accent: #e2703f;
+    --color-accent-ink: #f08c5c;
+    --color-accent-soft: #2e1d14;
+
+    --color-strong: #6cc496;
+    --color-strong-soft: #16281f;
+    --color-possible: #d8ab52;
+    --color-possible-soft: #2a2115;
+    --color-weak: #a39a8d;
+    --color-weak-soft: #252119;
+
+    --color-danger: #ef8d84;
+    --color-danger-soft: #2e1815;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-paper: #14120e;
+  --color-panel: #1b1814;
+  --color-panel-2: #211d18;
+
+  --color-ink: #f0ebe0;
+  --color-ink-2: #bcb4a6;
+  --color-ink-3: #948b7d;
+  --color-rule: #332e26;
+  --color-rule-2: #272319;
+
+  --color-on-solid: #14120e;
+  --color-accent: #e2703f;
+  --color-accent-ink: #f08c5c;
+  --color-accent-soft: #2e1d14;
+
+  --color-strong: #6cc496;
+  --color-strong-soft: #16281f;
+  --color-possible: #d8ab52;
+  --color-possible-soft: #2a2115;
+  --color-weak: #a39a8d;
+  --color-weak-soft: #252119;
+
+  --color-danger: #ef8d84;
+  --color-danger-soft: #2e1815;
+}
+
 * {
   border-color: var(--color-rule);
 }
@@ -58,8 +127,20 @@ body {
 
 /* Barely-there paper tooth. Invisible as texture, present as warmth. */
 body {
-  background-image: radial-gradient(rgba(26, 24, 20, 0.022) 1px, transparent 0);
+  background-image: radial-gradient(var(--tooth) 1px, transparent 0);
   background-size: 3px 3px;
+}
+
+:root {
+  --tooth: rgba(26, 24, 20, 0.022);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --tooth: rgba(240, 235, 224, 0.018);
+  }
+}
+:root[data-theme="dark"] {
+  --tooth: rgba(240, 235, 224, 0.018);
 }
 
 /* ─── Editorial type utilities ─── */
@@ -124,7 +205,7 @@ body {
   position: absolute;
   inset: 0;
   transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+  background: linear-gradient(90deg, transparent, var(--shimmer-hi), transparent);
   animation: shimmer 1.6s infinite;
 }
 
@@ -141,6 +222,23 @@ body {
 }
 .dot {
   animation: pulse-dot 1.1s ease-in-out infinite;
+}
+
+:root {
+  --shimmer-hi: rgba(255, 255, 255, 0.9);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --shimmer-hi: rgba(255, 255, 255, 0.055);
+  }
+}
+:root[data-theme="dark"] {
+  --shimmer-hi: rgba(255, 255, 255, 0.055);
+}
+
+/* Theme switching should not animate every surface at once. */
+html.theme-switching * {
+  transition: none !important;
 }
 
 /* ─── Focus ───

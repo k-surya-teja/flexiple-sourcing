@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Icon, ErrorCard, ThinkingLine } from "./Primitives";
+import { ThemeToggle } from "./ThemeToggle";
 import type { LLMErrorShape } from "@/lib/client";
 
 const EXAMPLES = [
@@ -31,6 +32,7 @@ export function SearchScreen({
         <span className="micro text-ink-3">Sourcing</span>
         <span className="flex-1" />
         <span className="micro text-ink-3">48 profiles indexed</span>
+        <ThemeToggle />
       </header>
 
       <div className="rise flex-1 pb-16 pt-16">
@@ -70,7 +72,7 @@ export function SearchScreen({
               <button
                 type="submit"
                 disabled={q.trim().length < 3 || busy}
-                className="micro inline-flex cursor-pointer items-center gap-2 bg-accent px-4 py-2 text-white transition hover:bg-accent-ink disabled:cursor-not-allowed disabled:bg-rule disabled:text-ink-3"
+                className="micro inline-flex cursor-pointer items-center gap-2 bg-accent px-4 py-2 text-on-solid transition hover:bg-accent-ink disabled:cursor-not-allowed disabled:bg-rule disabled:text-ink-3"
               >
                 {busy ? "Reading the brief" : "Build the search"}
                 {!busy && <Icon.Arrow className="h-3 w-3" />}

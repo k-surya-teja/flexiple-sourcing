@@ -187,7 +187,7 @@ export function ErrorCard({
         <button
           onClick={onRetry}
           disabled={wait > 0}
-          className="micro mt-3 cursor-pointer bg-danger px-3 py-1.5 text-white transition hover:bg-danger/90 disabled:cursor-not-allowed disabled:opacity-40"
+          className="micro mt-3 cursor-pointer bg-danger px-3 py-1.5 text-on-solid transition hover:bg-danger/90 disabled:cursor-not-allowed disabled:opacity-40"
         >
           {wait > 0 ? `Retry in ${wait}s` : "Try again"}
         </button>
