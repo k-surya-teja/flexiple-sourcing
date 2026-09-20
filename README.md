@@ -221,8 +221,38 @@ so they can be edited without restarting.
 
 ## What I prioritised, and what I cut
 
-**Time box: 3 hours.** Roughly 55 minutes on the engine, 50 on the interface,
-the rest on the dataset, verification and this document.
+### Time
+
+The time-boxed build ran **12:20–15:15** — roughly two and a half hours from
+first commit to a loop working end to end against the live API: schemas, the
+resilient LLM wrapper, deterministic filtering, evidence verification,
+patch-based refinement, the full interface, the prompts, and this document.
+That state is tagged **`v1-timeboxed`**, so it can be read on its own:
+
+```bash
+git checkout v1-timeboxed        # the submission at the deadline
+git diff v1-timeboxed..main      # everything since
+```
+
+About 25 minutes of that window was spent blocked rather than building: Groq
+retired `llama-3.3-70b` from my account mid-build, and a `max_tokens` value
+larger than the account's per-minute budget turned one search into a 17-minute
+hang before I diagnosed it with `LLM_DEBUG=1`.
+
+**Commits after 15:15 are a second session**, and they are listed here rather
+than folded into the box. They are mostly not features — they are defects that
+only surfaced once I tested properly:
+
+| | |
+|---|---|
+| Relevance bug | `MAX_SCORED` truncated in dataset order, so a loose-filter search scored 15 backend engineers and never saw a frontend candidate. Fixed with `lib/prerank.ts` |
+| Calibration bug | Independent batches calibrated against themselves — a textbook match scored 20 while a comparable profile scored 81. Fixed by scoring the shortlist in one call |
+| Stale-response race | No sequence guard, so a slow round could land last and overwrite newer criteria |
+| Silent truncation | Refinement history dropped older rounds without saying so |
+| Packaging | Next's default `.gitignore` was swallowing `.env.example`, found by cloning the repo and following this README verbatim |
+
+The rest of that session is the editorial design pass, dark mode, real routes
+and multi-search sessions.
 
 ### The interface
 
