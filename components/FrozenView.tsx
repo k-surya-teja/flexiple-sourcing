@@ -47,8 +47,8 @@ export function FrozenView({
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-8 py-10">
       {/* Masthead */}
-      <header className="flex items-baseline gap-3 border-b border-ink pb-2.5">
-        <span className="display text-[17px] leading-none text-ink">Flexiple</span>
+      <header className="flex items-baseline gap-3 border-b border-ink pb-3">
+        <span className="display text-[30px] leading-none text-ink">Flexiple</span>
         <span className="micro text-ink-3">Sourcing</span>
         <span className="flex-1" />
         <span className="micro text-accent">Frozen</span>

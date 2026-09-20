@@ -27,28 +27,28 @@ export function SearchScreen({
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-10 py-9">
       {/* Masthead */}
-      <header className="flex items-baseline gap-3 border-b border-ink pb-2.5">
-        <span className="display text-[17px] leading-none text-ink">Flexiple</span>
+      <header className="flex items-baseline gap-3 border-b border-ink pb-3">
+        <span className="display text-[30px] leading-none text-ink">Flexiple</span>
         <span className="micro text-ink-3">Sourcing</span>
         <span className="flex-1" />
-        <span className="micro text-ink-3">48 profiles indexed</span>
+        <span className="micro hidden text-ink-3 sm:inline">48 profiles indexed</span>
         <ThemeToggle />
       </header>
 
-      <div className="rise flex-1 pb-16 pt-16">
-        <p className="micro mb-5 text-accent">Step one of three</p>
+      <div className="rise flex-1 pb-16 pt-7">
+        <p className="micro mb-3.5 text-accent">Step one of three</p>
 
-        <h1 className="display max-w-[15ch] text-[60px] leading-[0.95] text-ink">
+        <h1 className="display max-w-[15ch] text-[56px] leading-[0.92] text-ink">
           Describe who you&rsquo;re looking for.
         </h1>
 
-        <p className="mt-5 max-w-[54ch] text-[15px] leading-[1.6] text-ink-2">
+        <p className="mt-3.5 max-w-[62ch] text-[14.5px] leading-[1.55] text-ink-2">
           Write it the way you&rsquo;d say it out loud. You&rsquo;ll get objective filters and a fit rubric you
           can edit, then you can argue with the results until they&rsquo;re right.
         </p>
 
         <form
-          className="mt-10 max-w-3xl"
+          className="mt-6 max-w-3xl"
           onSubmit={(e) => {
             e.preventDefault();
             if (q.trim().length >= 3 && !busy) onSubmit(q.trim());
@@ -98,7 +98,7 @@ export function SearchScreen({
         )}
 
         {!busy && !error && (
-          <div className="mt-12 max-w-3xl">
+          <div className="mt-10 max-w-3xl">
             <div className="mb-1 flex items-center gap-2.5">
               <span className="micro shrink-0 text-ink-3">Or start from</span>
               <span className="h-px flex-1 bg-rule" />
