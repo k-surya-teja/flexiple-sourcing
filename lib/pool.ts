@@ -15,6 +15,13 @@ export function allProfiles(): Profile[] {
   return cached;
 }
 
+/** Size of the searchable pool. Read from the data rather than written into the
+    UI as a literal: the brief supplies its own profiles.json, and a hardcoded
+    count would quietly start lying the moment that file is swapped. */
+export function poolSize(): number {
+  return allProfiles().length;
+}
+
 /** Fed to the analyze prompt so generated filters use real database values
     rather than plausible-looking synonyms that match nobody. */
 export function vocabulary() {

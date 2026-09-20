@@ -16,12 +16,16 @@ export function SearchScreen({
   busy,
   error,
   onRetry,
+  poolSize,
   sessions,
 }: {
   onSubmit: (q: string) => void;
   busy: boolean;
   error: LLMErrorShape | null;
   onRetry: () => void;
+  /** Size of the searchable pool, shown so the recruiter knows what they are
+      searching against before they type. */
+  poolSize: number;
   /* Every search run this session. Listed rather than auto-resumed: bouncing
      straight into the newest one would make the back button unusable and leave
      no way to start a different search. */
@@ -49,7 +53,7 @@ export function SearchScreen({
         <span className="display text-[30px] leading-none text-ink">Flexiple</span>
         <span className="micro text-ink-3">Sourcing</span>
         <span className="flex-1" />
-        <span className="micro hidden text-ink-3 sm:inline">48 profiles indexed</span>
+        <span className="micro hidden text-ink-3 sm:inline">{poolSize.toLocaleString()} profiles indexed</span>
         <ThemeToggle />
       </header>
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/lib/session";
+import { poolSize } from "@/lib/pool";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono-face", display: "swap" });
@@ -39,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Mounted in the layout, not a page: App Router layouts do not remount
             across client navigation, so the search survives moving between
             /, /refine and /shortlist. */}
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider poolSize={poolSize()}>{children}</SessionProvider>
       </body>
     </html>
   );

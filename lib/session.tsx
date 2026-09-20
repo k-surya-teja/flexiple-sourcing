@@ -43,6 +43,8 @@ export type SearchRecord = {
 };
 
 type SessionValue = {
+  /** Number of profiles in the talent pool, read from the dataset at build. */
+  poolSize: number;
   hydrated: boolean;
   searches: SearchRecord[];
   get: (id: string) => SearchRecord | undefined;
@@ -78,7 +80,13 @@ export const useSession = () => {
 const uid = () => Math.random().toString(36).slice(2, 9);
 type Draft<T> = T extends unknown ? Omit<T, "id"> : never;
 
-export function SessionProvider({ children }: { children: React.ReactNode }) {
+export function SessionProvider({
+  children,
+  poolSize,
+}: {
+  children: React.ReactNode;
+  poolSize: number;
+}) {
   const router = useRouter();
   const [searches, setSearches] = useState<SearchRecord[]>([]);
   const [hydrated, setHydrated] = useState(false);
@@ -262,6 +270,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   );
 
   const value: SessionValue = {
+    poolSize,
     hydrated,
     searches,
     get: (id) => searches.find((s) => s.id === id),

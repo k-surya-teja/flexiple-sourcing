@@ -377,4 +377,7 @@ city, right everything but nine years, right profile but scaleup rather than
 startup, strong Bangalore startup backend engineer who has only ever used
 MongoDB) and clear non-matches, so the refinement loop has something to bite on.
 Replacing this file with a different one in the same schema requires no code
-changes.
+changes. The pool size shown in the masthead is read from the file rather than
+written into the UI as a literal, so it stays truthful when the dataset is
+swapped — verified by swapping in a 7-profile file and watching the label
+follow.

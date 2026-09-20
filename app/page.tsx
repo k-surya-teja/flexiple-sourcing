@@ -17,6 +17,7 @@ export default function EntryPage() {
       busy={s.busy === "analyze"}
       error={s.analyzeError}
       onRetry={s.retry}
+      poolSize={s.poolSize}
       sessions={
         s.hydrated && s.searches.length
           ? {
