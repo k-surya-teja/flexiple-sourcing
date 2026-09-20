@@ -106,6 +106,31 @@ every score it already has and returns in milliseconds. The header shows how man
 scores were reused. This is most of why refinement feels like a conversation
 rather than a new search.
 
+**5a. Three real routes, with the session in the layout.**
+`/`, `/refine` and `/shortlist` are genuine routes, so the URL means something
+and the browser back button works. The session lives in a provider mounted in
+`app/layout.tsx` rather than in a page, because App Router layouts do not
+remount across client navigation — the search survives moving between routes,
+which a page-level store could not do.
+
+Three things follow, each of which was a real hole before:
+
+- **Leaving is possible.** There was previously no way out of the workspace
+  except freezing first. There is now a "New search" action, and because it
+  throws away a search that cost real time and tokens, it asks once rather than
+  acting on a stray click.
+- **Refresh is no longer destructive.** State is mirrored to `sessionStorage`,
+  which dies with the tab — within-session recovery, not the cross-session
+  persistence the brief rules out. In-flight status and errors are deliberately
+  *not* persisted: a reload should never restore a spinner or a stale failure.
+- **Deep links degrade gracefully.** `/refine` or `/shortlist` with no session
+  redirects to the entry screen instead of rendering an empty workspace.
+
+The entry screen deliberately does **not** auto-redirect when a session exists.
+Bouncing the recruiter straight back to `/refine` would make the back button
+unusable and leave no way to start a different search, so they get a "Search in
+progress — Resume / Discard" banner and choose.
+
 **5. The client owns session state; the server is stateless.**
 Filters, rubric, message history and feedback live in the browser and are posted
 with each request. The server keeps only its score cache, which is a pure
@@ -286,13 +311,17 @@ get there.
 
 ```
 app/
-  page.tsx              phase machine + all session state
+  layout.tsx            mounts SessionProvider
+  page.tsx              /            entry — free text in
+  refine/page.tsx       /refine      the workspace
+  shortlist/page.tsx    /shortlist   the frozen shortlist
   api/analyze/route.ts  LLM #1
   api/search/route.ts   pure filter + LLM #2
   api/refine/route.ts   LLM #3 + deterministic patch application
 components/             SearchScreen · CriteriaPanel · ResultsPanel · ProfileCard
                         ChatPanel · FrozenView · Primitives
 lib/
+  session.tsx           all session state + the three async actions
   schemas.ts            Zod contracts — the real interface of the app
   llm.ts                the only place that talks to Groq
   filter.ts  match.ts   pure, deterministic filtering
