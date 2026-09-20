@@ -67,7 +67,19 @@ export default function RefinePage() {
       {/* ── Results ── */}
       <main className="scroll-thin xl:flex-1 xl:overflow-y-auto">
         <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-ink bg-paper/92 px-7 py-3 backdrop-blur">
-          <div className="min-w-0">
+          {/* Non-destructive: the session is kept, and the entry screen offers
+              Resume. Pushes rather than history.back() so it behaves the same
+              when the workspace was reached by a deep link with no history. */}
+          <button
+            onClick={() => router.push("/")}
+            title="Back to search — this search is kept"
+            aria-label="Back to search"
+            className="group/back -ml-1.5 shrink-0 cursor-pointer border border-transparent p-2 text-ink-3 transition hover:border-rule hover:bg-panel hover:text-ink"
+          >
+            <Icon.ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover/back:-translate-x-0.5" />
+          </button>
+
+          <div className="min-w-0 flex-1">
             <p className="display truncate text-[17px] leading-tight text-ink">&ldquo;{query}&rdquo;</p>
             <p className="mt-0.5 font-mono text-[10.5px] text-ink-3">
               {rounds === 0 ? "no refinements yet" : `${rounds} refinement ${rounds === 1 ? "round" : "rounds"}`}

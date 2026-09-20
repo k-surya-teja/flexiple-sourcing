@@ -29,6 +29,11 @@ export const Icon = {
       <path d="M2.5 8h11M9.5 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
     </svg>
   ),
+  ArrowLeft: (p: { className?: string }) => (
+    <svg viewBox="0 0 16 16" fill="none" className={p.className} aria-hidden>
+      <path d="M13.5 8h-11M6.5 4l-4 4 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
+    </svg>
+  ),
   Freeze: (p: { className?: string }) => (
     <svg viewBox="0 0 16 16" fill="none" className={p.className} aria-hidden>
       <path d="M8 1.5v13M2.5 4.5l11 7M13.5 4.5l-11 7" stroke="currentColor" strokeWidth="1.4" strokeLinecap="square" />
