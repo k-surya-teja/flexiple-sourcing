@@ -178,11 +178,19 @@ Three things came out of measuring it rather than guessing (`LLM_DEBUG=1`):
   chain turned one search into a 17-minute hang. Budgets are now sized to the
   work (2,600 for a scoring batch) and there is a hard deadline so no round can
   ever run away like that again.
-- **Batch size is a token trade, not a latency one.** The system prompt is resent
-  with every batch, so *larger* batches spend fewer total tokens; completion
-  tokens scale with profile count either way. Scoring runs one batch of six at a
-  time, sequentially — two parallel calls at ~4k tokens each blow the minute's
-  budget in one go.
+- **Batch size turned out to be a calibration decision, not a token one.** A
+  model scoring six profiles calibrates against those six, so identical
+  candidates land in different bands depending on who they were batched with.
+  Final testing caught it plainly: a textbook match for "senior frontend
+  engineers who have owned a design system" — whose summary reads *"owned the
+  entire web client at a design-tools startup"* — scored **20**, below unrelated
+  backend engineers, while a comparable frontend profile in another batch scored
+  **81**. `MAX_SCORED` is 15 precisely so the whole shortlist fits in one request
+  inside the minute's budget, so scoring now happens in a single call and the
+  model has one frame of reference. The same search after: **68**, and every
+  frontend engineer outranks every backend engineer. It is also faster — 18s to
+  5.8s — because the system prompt is sent once instead of three times.
+  Batching remains as the fallback if the cap is ever raised.
 - **A rate limit is account-wide, so falling back to another model is pure
   waste.** Only `upstream` and `truncated` failures walk the model chain; a 429
   waits out its `Retry-After` instead.
@@ -296,11 +304,15 @@ get there.
   at the reviewer's request. It is noted here rather than folded into the build
   time.
 - **A profile the recruiter explicitly approved can still slip down the ranking.**
-  In testing, adding two weight-5 criteria on top of five existing ones compressed
-  the score range and moved an approved profile from #3 to #6. Scores are produced
-  per batch without sight of the whole pool, so they are calibrated loosely.
-  Pinning approved profiles, or asking the refinement step to cap the number of
-  weight-5 criteria, would be the first fix with more time.
+  Scoring the whole shortlist in one call fixed cross-batch inconsistency, but
+  scores are still absolute judgements rather than a forced ranking, so adding
+  two weight-5 criteria can reshuffle the middle of the list. Pinning approved
+  profiles, or capping how many weight-5 criteria a refinement may add, is the
+  first thing I would do next.
+- **Above 15 matches the pool is truncated**, and batching — with its
+  calibration weakness — would return. Raising `MAX_SCORED` needs either a paid
+  key or a two-pass approach: cheap scoring to shortlist, then one calibrated
+  pass over the finalists.
 
 - Below 1280px the three columns stack into one. It is usable, but this is a
   desktop tool and the desktop layout is the one that got the attention.
@@ -308,7 +320,7 @@ get there.
   `postgresql`, `k8s` → `kubernetes`). It is deliberately conservative: a filter
   that over-matches is worse than one that under-matches, because a recruiter can
   see a candidate who is missing but not one who was wrongly included.
-- `MAX_SCORED = 15`, `BATCH_SIZE = 6` and the token budgets are tuned for Groq's
+- `MAX_SCORED = 15`, `BATCH_SIZE = 15` and the token budgets are tuned for Groq's
   free tier, not for throughput. On a paid key, raising concurrency is the single
   biggest available speedup.
 

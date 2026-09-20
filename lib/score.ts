@@ -18,16 +18,24 @@ import { ScoreBatch, type Profile, type Rubric } from "./schemas";
    covered come back as `unscored` and the UI says so plainly.               */
 
 /* Sized against Groq's free tier, which is token-per-minute limited (8k/min on
-   a new key) rather than request limited. Two 4k-token calls in flight blow the
-   whole minute's budget at once and every subsequent call 429s, so scoring runs
-   one batch at a time with a modest output cap.
+   a new key) rather than request limited. Two calls in flight blow the whole
+   minute's budget at once and every subsequent call 429s, so scoring runs one
+   batch at a time.
 
-   Batch size is a token trade, not a latency one: the system prompt is resent
-   with every batch, so *larger* batches spend fewer total tokens. Completion
-   tokens scale with profile count either way. Six is where the per-batch
-   response still fits comfortably under the output cap. Throughput here is
-   bounded by the account's tokens-per-minute, not by the code. */
-const BATCH_SIZE = 6;
+   Batch size is a *calibration* decision before it is a token one. A model
+   scoring six profiles calibrates against those six, so identical candidates
+   land in different bands depending on who they were batched with — testing
+   caught a textbook match for a frontend search scoring 20 while a comparable
+   profile in another batch scored 81. Scoring the whole shortlist in one call
+   gives the model a single frame of reference and makes the ranking internally
+   consistent.
+
+   It also spends fewer tokens: the system prompt is resent with every batch, so
+   one call of fifteen costs less than three of five. Completion tokens scale
+   with profile count either way. MAX_SCORED is capped at 15 precisely so the
+   whole shortlist fits in one request inside the minute's budget; batching
+   remains as the fallback if that cap is ever raised. */
+const BATCH_SIZE = 15;
 const CONCURRENCY = 1;
 /** Whole-run budget. Past this, remaining batches fail fast and their profiles
     come back as unscored rather than the recruiter watching a spinner. */
@@ -92,7 +100,7 @@ export async function scoreProfiles(profiles: Profile[], rubric: Rubric): Promis
         user,
         schema: ScoreBatch,
         label: "scoring",
-        maxTokens: 2600,
+        maxTokens: 5200,
         deadline,
       }),
     };
