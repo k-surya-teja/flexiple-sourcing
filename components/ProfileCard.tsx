@@ -58,7 +58,7 @@ export function ProfileCard({
 
   return (
     <article
-      className={`rise group relative border-b border-rule-2 py-5 pl-9 pr-1 transition-colors ${
+      className={`rise group relative border-b border-rule-2 py-5 pl-11 pr-1 transition-colors ${
         reaction === "yes"
           ? "bg-strong-soft/40"
           : reaction === "no"
@@ -68,7 +68,9 @@ export function ProfileCard({
     >
       {reaction === "yes" && <span className="absolute inset-y-0 left-0 w-[2px] bg-strong" />}
 
-      <span className="absolute left-0 top-[23px] font-mono text-[11px] tabular-nums text-ink-3">
+      {/* Clear of the match bar at left-0, which otherwise sits over the
+          leading zero and reads as a different number entirely. */}
+      <span className="absolute left-2.5 top-[23px] font-mono text-[11px] tabular-nums text-ink-3">
         {String(rank).padStart(2, "0")}
       </span>
 
