@@ -6,25 +6,35 @@ import { useSession } from "@/lib/session";
 
 export default function EntryPage() {
   const router = useRouter();
-  const { hydrated, hasSession, state, busy, analyzeError, start, retry, reset } = useSession();
+  const s = useSession();
 
-  /* No automatic redirect when a session exists. Back from /refine lands here,
-     and bouncing the recruiter straight forward again would break the back
-     button and leave no way to start a different search. They are offered the
-     choice instead. */
+  /* No automatic redirect when searches exist. Back from a workspace lands
+     here, and bouncing forward again would break the back button and leave no
+     way to start a different search. The session list is offered instead. */
   return (
     <SearchScreen
-      onSubmit={start}
-      busy={busy === "analyze"}
-      error={analyzeError}
-      onRetry={retry}
-      resume={
-        hydrated && hasSession && busy === null
+      onSubmit={s.start}
+      busy={s.busy === "analyze"}
+      error={s.analyzeError}
+      onRetry={s.retry}
+      sessions={
+        s.hydrated && s.searches.length
           ? {
-              query: state.query,
-              rounds: state.rounds,
-              onResume: () => router.push(state.frozen ? "/shortlist" : "/refine"),
-              onDiscard: reset,
+              items: s.searches.map((r) => ({
+                id: r.id,
+                query: r.query,
+                rounds: r.rounds,
+                ranked: r.results?.results.length ?? 0,
+                matched: r.results?.pool.matched ?? 0,
+                frozen: r.frozen,
+                working: s.busyFor === r.id,
+              })),
+              onOpen: (id) => {
+                const r = s.get(id);
+                router.push(r?.frozen ? `/shortlist/${id}` : `/refine/${id}`);
+              },
+              onRemove: s.remove,
+              onClearAll: s.clearAll,
             }
           : undefined
       }

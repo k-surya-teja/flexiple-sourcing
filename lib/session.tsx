@@ -7,26 +7,30 @@ import type { Filters, Rubric } from "./schemas";
 import type { LockKey } from "./ops";
 import type { Message } from "@/components/ChatPanel";
 
-/* One session, held in a provider mounted in the root layout.
+/* A session holds every search the recruiter has run, not just the latest.
 
-   Why here and not in a page: App Router layouts do not remount across client
-   navigation, so /, /refine and /shortlist can be real routes — real URLs, a
-   working browser back button — while the search itself survives moving
-   between them. A page-level store would be destroyed on every navigation.
+   Sourcing is comparative work — you try "RDS developers in Bangalore", then
+   "senior frontend", then want the first one back. Previously starting a second
+   search destroyed the first, along with the tokens and the refinement rounds
+   that went into it. Each search now keeps its own filters, rubric, results,
+   conversation and locked fields, and carries its own id in the URL.
 
-   Why sessionStorage: a refresh used to discard a search that cost ten seconds
-   and real tokens to produce. sessionStorage dies with the tab, so this is
-   within-session recovery, not the cross-session persistence the brief rules
-   out. Transient things — in-flight status, errors — are deliberately not
-   persisted; a reload should never restore a spinner or a stale failure. */
+   Mounted in the root layout: App Router layouts do not remount across client
+   navigation, so searches survive moving between routes. Mirrored to
+   sessionStorage, which dies with the tab — within-session recovery, not the
+   cross-session persistence the brief rules out. In-flight status and errors
+   are deliberately not persisted; a reload must never restore a spinner or a
+   stale failure. */
 
 const KEY = "flexiple.sourcing.session";
+const MAX_SEARCHES = 12;
 
-export type Phase = "search" | "refine" | "shortlist";
 type Busy = null | "analyze" | "search" | "refine";
 
-type Persisted = {
+export type SearchRecord = {
+  id: string;
   query: string;
+  createdAt: number;
   filters: Filters | null;
   rubric: Rubric | null;
   results: SearchResponse | null;
@@ -38,39 +42,28 @@ type Persisted = {
   frozen: boolean;
 };
 
-const EMPTY: Persisted = {
-  query: "",
-  filters: null,
-  rubric: null,
-  results: null,
-  messages: [],
-  locked: [],
-  reactions: {},
-  rounds: 0,
-  history: [],
-  frozen: false,
-};
-
 type SessionValue = {
   hydrated: boolean;
-  hasSession: boolean;
-  state: Persisted;
+  searches: SearchRecord[];
+  get: (id: string) => SearchRecord | undefined;
   busy: Busy;
+  /** Which search the in-flight work belongs to. */
+  busyFor: string | null;
   analyzeError: LLMErrorShape | null;
-  searchError: LLMErrorShape | null;
-  dirty: boolean;
+  errorFor: (id: string) => LLMErrorShape | null;
+  dirty: (id: string) => boolean;
   start: (query: string) => Promise<void>;
-  runSearch: (f: Filters, r: Rubric) => Promise<void>;
-  sendFeedback: (text: string) => Promise<void>;
-  setFilters: (f: Filters, lock: LockKey) => void;
-  setRubric: (r: Rubric) => void;
-  react: (id: string, r: "yes" | "no") => void;
-  clearReactions: () => void;
-  freeze: () => void;
-  reopen: () => void;
-  /** Clears the frozen flag without navigating — for landing on /refine directly. */
-  reopenInPlace: () => void;
-  reset: () => void;
+  runSearch: (id: string, f: Filters, r: Rubric) => Promise<void>;
+  sendFeedback: (id: string, text: string) => Promise<void>;
+  setFilters: (id: string, f: Filters, lock: LockKey) => void;
+  setRubric: (id: string, r: Rubric) => void;
+  react: (id: string, profileId: string, r: "yes" | "no") => void;
+  clearReactions: (id: string) => void;
+  freeze: (id: string) => void;
+  reopen: (id: string) => void;
+  unfreezeInPlace: (id: string) => void;
+  remove: (id: string) => void;
+  clearAll: () => void;
   retry: () => void;
 };
 
@@ -87,24 +80,27 @@ type Draft<T> = T extends unknown ? Omit<T, "id"> : never;
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const [state, setState] = useState<Persisted>(EMPTY);
+  const [searches, setSearches] = useState<SearchRecord[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [busy, setBusy] = useState<Busy>(null);
+  const [busyFor, setBusyFor] = useState<string | null>(null);
   const [analyzeError, setAnalyzeError] = useState<LLMErrorShape | null>(null);
-  const [searchError, setSearchError] = useState<LLMErrorShape | null>(null);
-  const [dirty, setDirty] = useState(false);
+  const [searchErrors, setSearchErrors] = useState<Record<string, LLMErrorShape>>({});
+  const [dirtyIds, setDirtyIds] = useState<Record<string, boolean>>({});
 
   const retryRef = useRef<(() => void) | null>(null);
-  /* Only the newest search may write results: rounds range from ~200ms on a
-     full cache hit to ~30s waiting out a rate limit, so a slow early request
-     can otherwise land last and overwrite criteria already moved on from. */
-  const searchSeq = useRef(0);
+  /* Per-search request ids. Rounds range from ~200ms on a full cache hit to
+     ~30s waiting out a rate limit, so a slow early request can otherwise land
+     last and overwrite criteria already moved on from. */
+  const seqs = useRef<Record<string, number>>({});
 
-  // Restore on first mount, so a refresh does not throw the search away.
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem(KEY);
-      if (raw) setState({ ...EMPTY, ...(JSON.parse(raw) as Persisted) });
+      if (raw) {
+        const parsed = JSON.parse(raw) as SearchRecord[];
+        if (Array.isArray(parsed)) setSearches(parsed);
+      }
     } catch {
       /* corrupt or unavailable — start clean rather than crash */
     }
@@ -114,38 +110,55 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!hydrated) return;
     try {
-      if (state.filters) sessionStorage.setItem(KEY, JSON.stringify(state));
+      if (searches.length) sessionStorage.setItem(KEY, JSON.stringify(searches));
       else sessionStorage.removeItem(KEY);
     } catch {
       /* quota or private mode — the session simply will not survive a reload */
     }
-  }, [state, hydrated]);
+  }, [searches, hydrated]);
 
-  const patch = (p: Partial<Persisted>) => setState((s) => ({ ...s, ...p }));
-  const say = (m: Draft<Message>) =>
-    setState((s) => ({ ...s, messages: [...s.messages, { ...m, id: uid() } as Message] }));
+  const update = useCallback(
+    (id: string, fn: (s: SearchRecord) => SearchRecord) =>
+      setSearches((all) => all.map((s) => (s.id === id ? fn(s) : s))),
+    [],
+  );
 
-  const runSearch = useCallback(async (f: Filters, r: Rubric) => {
-    const seq = ++searchSeq.current;
-    setBusy("search");
-    setSearchError(null);
-    setDirty(false);
+  const say = useCallback(
+    (id: string, m: Draft<Message>) =>
+      update(id, (s) => ({ ...s, messages: [...s.messages, { ...m, id: uid() } as Message] })),
+    [update],
+  );
 
-    const res = await search(f, r);
-    if (seq !== searchSeq.current) return; // superseded
+  const runSearch = useCallback(
+    async (id: string, f: Filters, r: Rubric) => {
+      const seq = (seqs.current[id] = (seqs.current[id] ?? 0) + 1);
+      setBusy("search");
+      setBusyFor(id);
+      setSearchErrors((e) => {
+        const { [id]: _gone, ...rest } = e;
+        return rest;
+      });
+      setDirtyIds((d) => ({ ...d, [id]: false }));
 
-    setBusy(null);
-    if (!res.ok) {
-      setSearchError(res.error);
-      retryRef.current = () => void runSearch(f, r);
-      return;
-    }
-    patch({ results: res.data });
-  }, []);
+      const res = await search(f, r);
+      if (seq !== seqs.current[id]) return; // superseded
+
+      setBusy(null);
+      setBusyFor(null);
+      if (!res.ok) {
+        setSearchErrors((e) => ({ ...e, [id]: res.error }));
+        retryRef.current = () => void runSearch(id, f, r);
+        return;
+      }
+      update(id, (s) => ({ ...s, results: res.data }));
+    },
+    [update],
+  );
 
   const start = useCallback(
     async (query: string) => {
       setBusy("analyze");
+      setBusyFor(null);
       setAnalyzeError(null);
 
       const res = await analyze(query);
@@ -157,11 +170,14 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       }
 
       const { filters, rubric, interpretation, preview } = res.data;
-      setState({
-        ...EMPTY,
+      const id = uid();
+      const record: SearchRecord = {
+        id,
         query,
+        createdAt: Date.now(),
         filters,
         rubric,
+        results: null,
         messages: [
           { id: uid(), role: "assistant", kind: "note", text: interpretation },
           {
@@ -171,29 +187,38 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
             text: `${preview.matched} of ${preview.totalPool} profiles clear these filters. Scoring them against the rubric now — tell me what's wrong with the results and I'll adjust.`,
           },
         ],
-      });
-      router.push("/refine");
-      await runSearch(filters, rubric);
+        locked: [],
+        reactions: {},
+        rounds: 0,
+        history: [],
+        frozen: false,
+      };
+
+      // Newest first, and bounded so a long session cannot exhaust storage.
+      setSearches((all) => [record, ...all].slice(0, MAX_SEARCHES));
+      router.push(`/refine/${id}`);
+      await runSearch(id, filters, rubric);
     },
     [router, runSearch],
   );
 
   const sendFeedback = useCallback(
-    async (text: string) => {
-      const { filters, rubric, results, reactions, locked, history, query } = state;
-      if (!filters || !rubric || !results) return;
+    async (id: string, text: string) => {
+      const rec = searches.find((s) => s.id === id);
+      if (!rec?.filters || !rec.rubric || !rec.results) return;
 
-      say({ role: "recruiter", text });
+      say(id, { role: "recruiter", text });
       setBusy("refine");
+      setBusyFor(id);
 
-      const liked = Object.entries(reactions).filter(([, v]) => v === "yes").map(([k]) => k);
-      const disliked = Object.entries(reactions).filter(([, v]) => v === "no").map(([k]) => k);
+      const liked = Object.entries(rec.reactions).filter(([, v]) => v === "yes").map(([k]) => k);
+      const disliked = Object.entries(rec.reactions).filter(([, v]) => v === "no").map(([k]) => k);
 
       const res = await refine({
-        query,
-        filters,
-        rubric,
-        shown: results.results.slice(0, 5).map((r) => ({
+        query: rec.query,
+        filters: rec.filters,
+        rubric: rec.rubric,
+        shown: rec.results.results.slice(0, 5).map((r) => ({
           profile_id: r.profile.id,
           name: r.profile.name,
           current_title: r.profile.current_title,
@@ -206,18 +231,19 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         message: text,
         liked,
         disliked,
-        locked,
-        history,
+        locked: rec.locked,
+        history: rec.history,
       });
 
       setBusy(null);
+      setBusyFor(null);
       if (!res.ok) {
-        say({ role: "assistant", kind: "error", error: res.error });
-        retryRef.current = () => void sendFeedback(text);
+        say(id, { role: "assistant", kind: "error", error: res.error });
+        retryRef.current = () => void sendFeedback(id, text);
         return;
       }
 
-      setState((s) => ({
+      update(id, (s) => ({
         ...s,
         filters: res.data.filters,
         rubric: res.data.rubric,
@@ -230,61 +256,64 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         ],
       }));
 
-      await runSearch(res.data.filters, res.data.rubric);
+      await runSearch(id, res.data.filters, res.data.rubric);
     },
-    [state, runSearch],
+    [searches, say, update, runSearch],
   );
 
   const value: SessionValue = {
     hydrated,
-    hasSession: !!state.filters && !!state.rubric,
-    state,
+    searches,
+    get: (id) => searches.find((s) => s.id === id),
     busy,
+    busyFor,
     analyzeError,
-    searchError,
-    dirty,
+    errorFor: (id) => searchErrors[id] ?? null,
+    dirty: (id) => !!dirtyIds[id],
     start,
     runSearch,
     sendFeedback,
-    setFilters: (f, lock) => {
-      setState((s) => ({ ...s, filters: f, locked: s.locked.includes(lock) ? s.locked : [...s.locked, lock] }));
-      setDirty(true);
+    setFilters: (id, f, lock) => {
+      update(id, (s) => ({
+        ...s,
+        filters: f,
+        locked: s.locked.includes(lock) ? s.locked : [...s.locked, lock],
+      }));
+      setDirtyIds((d) => ({ ...d, [id]: true }));
     },
-    setRubric: (r) => {
-      patch({ rubric: r });
-      setDirty(true);
+    setRubric: (id, r) => {
+      update(id, (s) => ({ ...s, rubric: r }));
+      setDirtyIds((d) => ({ ...d, [id]: true }));
     },
-    react: (id, r) =>
-      setState((s) => {
-        if (s.reactions[id] === r) {
-          const { [id]: _cleared, ...rest } = s.reactions;
+    react: (id, profileId, r) =>
+      update(id, (s) => {
+        if (s.reactions[profileId] === r) {
+          const { [profileId]: _cleared, ...rest } = s.reactions;
           return { ...s, reactions: rest };
         }
-        return { ...s, reactions: { ...s.reactions, [id]: r } };
+        return { ...s, reactions: { ...s.reactions, [profileId]: r } };
       }),
-    clearReactions: () => patch({ reactions: {} }),
-    freeze: () => {
-      patch({ frozen: true });
-      router.push("/shortlist");
+    clearReactions: (id) => update(id, (s) => ({ ...s, reactions: {} })),
+    freeze: (id) => {
+      update(id, (s) => ({ ...s, frozen: true }));
+      router.push(`/shortlist/${id}`);
     },
-    reopen: () => {
-      patch({ frozen: false });
-      router.push("/refine");
+    reopen: (id) => {
+      update(id, (s) => ({ ...s, frozen: false }));
+      router.push(`/refine/${id}`);
     },
-    reopenInPlace: () => patch({ frozen: false }),
-    reset: () => {
-      searchSeq.current++; // abandon anything in flight
-      setState(EMPTY);
+    unfreezeInPlace: (id) => update(id, (s) => ({ ...s, frozen: false })),
+    remove: (id) => {
+      seqs.current[id] = (seqs.current[id] ?? 0) + 1; // abandon anything in flight
+      setSearches((all) => all.filter((s) => s.id !== id));
+    },
+    clearAll: () => {
+      setSearches([]);
       setBusy(null);
+      setBusyFor(null);
       setAnalyzeError(null);
-      setSearchError(null);
-      setDirty(false);
-      try {
-        sessionStorage.removeItem(KEY);
-      } catch {
-        /* ignore */
-      }
-      router.push("/");
+      setSearchErrors({});
+      setDirtyIds({});
     },
     retry: () => retryRef.current?.(),
   };

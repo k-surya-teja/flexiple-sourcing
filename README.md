@@ -106,30 +106,37 @@ every score it already has and returns in milliseconds. The header shows how man
 scores were reused. This is most of why refinement feels like a conversation
 rather than a new search.
 
-**5a. Three real routes, with the session in the layout.**
-`/`, `/refine` and `/shortlist` are genuine routes, so the URL means something
-and the browser back button works. The session lives in a provider mounted in
-`app/layout.tsx` rather than in a page, because App Router layouts do not
-remount across client navigation — the search survives moving between routes,
-which a page-level store could not do.
+**5a. A session holds every search, and each one has its own URL.**
+Sourcing is comparative work: you try "RDS developers in Bangalore", then
+"senior frontend", then want the first one back. A session therefore keeps up to
+twelve searches, each with its own filters, rubric, results, conversation and
+locked fields, addressed as `/refine/<id>` and `/shortlist/<id>`. Starting a
+second search no longer destroys the first along with the tokens and refinement
+rounds that went into it.
 
-Three things follow, each of which was a real hole before:
+The session lives in a provider mounted in `app/layout.tsx` rather than in a
+page, because App Router layouts do not remount across client navigation — a
+page-level store would be wiped every time the recruiter moved between routes.
 
-- **Leaving is possible.** There was previously no way out of the workspace
-  except freezing first. There is now a "New search" action, and because it
-  throws away a search that cost real time and tokens, it asks once rather than
-  acting on a stray click.
-- **Refresh is no longer destructive.** State is mirrored to `sessionStorage`,
+Four things follow, each of which was a real hole before:
+
+- **Leaving is possible, and cheap.** There was previously no way out of the
+  workspace except freezing first. A back arrow now returns to the session list,
+  and because the search is kept rather than discarded, stepping out costs
+  nothing.
+- **Refresh is no longer destructive.** Searches mirror to `sessionStorage`,
   which dies with the tab — within-session recovery, not the cross-session
   persistence the brief rules out. In-flight status and errors are deliberately
   *not* persisted: a reload should never restore a spinner or a stale failure.
-- **Deep links degrade gracefully.** `/refine` or `/shortlist` with no session
-  redirects to the entry screen instead of rendering an empty workspace.
+- **Requests are tracked per search.** Each search has its own monotonic request
+  id, so a slow round in one cannot land late and overwrite another.
+- **Deep links degrade gracefully.** An id this session does not hold redirects
+  to the entry screen rather than rendering an empty workspace.
 
-The entry screen deliberately does **not** auto-redirect when a session exists.
-Bouncing the recruiter straight back to `/refine` would make the back button
-unusable and leave no way to start a different search, so they get a "Search in
-progress — Resume / Discard" banner and choose.
+The entry screen deliberately does **not** auto-open the newest search. Bouncing
+the recruiter straight into a workspace would make the back button unusable and
+leave no way to start a different search, so past searches are listed with their
+state — rounds, matches, frozen, working — and they choose.
 
 **5. The client owns session state; the server is stateless.**
 Filters, rubric, message history and feedback live in the browser and are posted

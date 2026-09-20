@@ -15,6 +15,7 @@ export function FrozenView({
   results,
   pool,
   rounds,
+  onBack,
   onReopen,
   onRestart,
 }: {
@@ -24,6 +25,7 @@ export function FrozenView({
   results: SearchResult[];
   pool: PoolInfo | null;
   rounds: number;
+  onBack: () => void;
   onReopen: () => void;
   onRestart: () => void;
 }) {
@@ -54,6 +56,14 @@ export function FrozenView({
     <main className="mx-auto min-h-screen max-w-6xl px-8 py-10">
       {/* Masthead */}
       <header className="flex items-baseline gap-3 border-b border-ink pb-3">
+        <button
+          onClick={onBack}
+          title="Back to all searches — this one is kept"
+          aria-label="Back to all searches"
+          className="group/back -ml-1.5 self-center cursor-pointer border border-transparent p-2 text-ink-3 transition hover:border-rule hover:bg-panel hover:text-ink"
+        >
+          <Icon.ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover/back:-translate-x-0.5" />
+        </button>
         <span className="display text-[30px] leading-none text-ink">Flexiple</span>
         <span className="micro text-ink-3">Sourcing</span>
         <span className="flex-1" />

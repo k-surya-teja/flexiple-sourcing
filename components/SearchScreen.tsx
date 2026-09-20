@@ -16,17 +16,29 @@ export function SearchScreen({
   busy,
   error,
   onRetry,
-  resume,
+  sessions,
 }: {
   onSubmit: (q: string) => void;
   busy: boolean;
   error: LLMErrorShape | null;
   onRetry: () => void;
-  /* Shown when a search is already in progress. Deliberately a banner rather
-     than an automatic redirect: bouncing straight back to /refine would make
-     the browser back button unusable, and starting a fresh search would become
-     impossible without first discarding the old one. */
-  resume?: { query: string; rounds: number; onResume: () => void; onDiscard: () => void };
+  /* Every search run this session. Listed rather than auto-resumed: bouncing
+     straight into the newest one would make the back button unusable and leave
+     no way to start a different search. */
+  sessions?: {
+    items: {
+      id: string;
+      query: string;
+      rounds: number;
+      ranked: number;
+      matched: number;
+      frozen: boolean;
+      working: boolean;
+    }[];
+    onOpen: (id: string) => void;
+    onRemove: (id: string) => void;
+    onClearAll: () => void;
+  };
 }) {
   const [q, setQ] = useState("");
 
@@ -42,34 +54,6 @@ export function SearchScreen({
       </header>
 
       <div className="rise flex-1 pb-16 pt-7">
-        {resume && (
-          <div className="mb-7 flex flex-wrap items-center gap-x-4 gap-y-2 border-l-2 border-accent bg-panel py-3 pl-4 pr-4">
-            <div className="min-w-0 flex-1">
-              <p className="micro text-accent">Search in progress</p>
-              <p className="mt-1 truncate text-[12.5px] text-ink-2">
-                &ldquo;{resume.query}&rdquo;
-                <span className="ml-2 font-mono text-[10.5px] text-ink-3">
-                  {resume.rounds} {resume.rounds === 1 ? "round" : "rounds"}
-                </span>
-              </p>
-            </div>
-            <div className="flex shrink-0 gap-2">
-              <button
-                onClick={resume.onResume}
-                className="micro cursor-pointer bg-accent px-3 py-1.5 text-on-solid transition hover:bg-accent-ink"
-              >
-                Resume
-              </button>
-              <button
-                onClick={resume.onDiscard}
-                className="micro cursor-pointer border border-rule px-3 py-1.5 text-ink-2 transition hover:border-ink hover:text-ink"
-              >
-                Discard
-              </button>
-            </div>
-          </div>
-        )}
-
         <p className="micro mb-3.5 text-accent">Step one of three</p>
 
         <h1 className="display max-w-[15ch] text-[56px] leading-[0.92] text-ink">
@@ -128,6 +112,55 @@ export function SearchScreen({
         {error && !busy && (
           <div className="mt-6 max-w-3xl">
             <ErrorCard error={error} onRetry={onRetry} />
+          </div>
+        )}
+
+        {sessions && sessions.items.length > 0 && !busy && (
+          <div className="mt-10 max-w-3xl">
+            <div className="mb-1 flex items-center gap-2.5">
+              <span className="micro shrink-0 text-ink-3">This session</span>
+              <span className="h-px flex-1 bg-rule" />
+              <button
+                onClick={sessions.onClearAll}
+                className="micro shrink-0 cursor-pointer text-ink-3 transition hover:text-danger"
+              >
+                Clear all
+              </button>
+            </div>
+            <ul>
+              {sessions.items.map((it, i) => (
+                <li key={it.id} className="group flex items-baseline gap-3.5 border-b border-rule-2">
+                  <button
+                    onClick={() => sessions.onOpen(it.id)}
+                    className="flex min-w-0 flex-1 items-baseline gap-3.5 py-3 text-left"
+                  >
+                    <span className="micro shrink-0 text-ink-3 transition group-hover:text-accent">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[13.5px] leading-[1.5] text-ink-2 transition group-hover:text-ink">
+                        {it.query}
+                      </span>
+                      <span className="mt-1 block font-mono text-[10.5px] text-ink-3">
+                        {it.working
+                          ? "working…"
+                          : it.frozen
+                            ? `frozen · ${it.ranked} ranked`
+                            : `${it.rounds} ${it.rounds === 1 ? "round" : "rounds"} · ${it.matched} matched`}
+                      </span>
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => sessions.onRemove(it.id)}
+                    aria-label={`Remove search: ${it.query}`}
+                    title="Remove this search"
+                    className="shrink-0 cursor-pointer p-1.5 text-ink-3 opacity-0 transition hover:text-danger group-hover:opacity-100"
+                  >
+                    <Icon.Cross className="h-3 w-3" />
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
 
