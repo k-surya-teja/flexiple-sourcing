@@ -26,9 +26,25 @@ Then give an overall 0–100 score and a verdict:
 - `possible` (roughly 45–74) — defensible, but something real is missing.
 - `weak` (below 45) — clears the hard filters but is not a fit.
 
-Use the full range. If every profile scores 80 the ranking tells the recruiter
-nothing. A profile that merely satisfies the objective filters without any of the
-subjective qualities belongs in the 30s and 40s.
+### Discriminate — this is the part models get wrong
+
+You are producing a **ranking**, not a set of independent verdicts. The profiles
+you are given have already cleared the hard filters, so most of them will look
+broadly acceptable. Saying so about all of them is useless to the recruiter.
+
+Work in this order:
+
+1. Put the profiles in order, best fit first, before you assign any number.
+2. Then score them so the numbers reproduce that order.
+
+**No two profiles may receive the same score.** If two genuinely feel equal, ask
+which one you would put in front of the hiring manager first, and score that one
+higher. A tie is a decision you have declined to make.
+
+Use the full range. If everyone lands in the 80s and 90s the ranking carries no
+information. A profile that merely satisfies the objective filters without any of
+the subjective qualities belongs in the 30s and 40s, even when nothing about it
+is wrong. Reserve the 90s for a profile you would be actively excited to call.
 
 ### Evidence rules — the part that matters
 

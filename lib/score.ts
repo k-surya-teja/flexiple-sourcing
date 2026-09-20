@@ -43,8 +43,12 @@ const RUN_BUDGET_MS = 60_000;
 
 const cache = new Map<string, VerifiedScore>();
 
-export const rubricHash = (r: Rubric) =>
-  crypto.createHash("sha1").update(JSON.stringify(r)).digest("hex").slice(0, 12);
+/* Keyed on the rubric AND the prompt that produced the score. Keying on the
+   rubric alone meant editing prompts/score.md changed nothing until the server
+   restarted — cached scores from the previous wording kept being served, which
+   is a genuinely confusing way to lose an afternoon. */
+export const scoreKey = (r: Rubric, systemPrompt: string) =>
+  crypto.createHash("sha1").update(JSON.stringify(r)).update("\u0000").update(systemPrompt).digest("hex").slice(0, 12);
 
 const chunk = <T,>(xs: T[], n: number) =>
   Array.from({ length: Math.ceil(xs.length / n) }, (_, i) => xs.slice(i * n, i * n + n));
@@ -68,7 +72,13 @@ export type ScoreRun = {
 
 export async function scoreProfiles(profiles: Profile[], rubric: Rubric): Promise<ScoreRun> {
   const deadline = Date.now() + RUN_BUDGET_MS;
-  const hash = rubricHash(rubric);
+  // Rendered once up front so the cache key reflects the exact prompt in use.
+  const promptShape = loadPrompt("score", {
+    role_summary: rubric.role_summary,
+    criteria: renderCriteria(rubric),
+    profiles: "",
+  }).system;
+  const hash = scoreKey(rubric, promptShape);
   const scores: VerifiedScore[] = [];
   const todo: Profile[] = [];
 

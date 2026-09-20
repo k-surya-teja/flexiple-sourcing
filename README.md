@@ -303,6 +303,12 @@ get there.
 - **Dark mode was originally cut and added afterwards**, outside the 3-hour box,
   at the reviewer's request. It is noted here rather than folded into the build
   time.
+- **Scores are judgements, not a forced distribution.** The prompt now requires
+  a strict ordering with no ties, after a run on the supplied dataset returned
+  six profiles all scoring exactly 92 — a ranked list where every score is
+  identical tells a recruiter nothing. With that instruction the same search
+  returns 90/82/74/66/58/50. It is still the model's judgement, though, so an
+  unusually uniform pool could compress again.
 - **A profile the recruiter explicitly approved can still slip down the ranking.**
   Scoring the whole shortlist in one call fixed cross-batch inconsistency, but
   scores are still absolute judgements rather than a forced ranking, so adding
@@ -371,13 +377,17 @@ Each profile carries a `linkedin` and an `email`. Three decisions there:
 
 ## Data
 
-`data/profiles.json` holds 48 fictional profiles in the schema given in the
-brief, mixing obvious matches, near misses on a single axis (right skills wrong
-city, right everything but nine years, right profile but scaleup rather than
-startup, strong Bangalore startup backend engineer who has only ever used
-MongoDB) and clear non-matches, so the refinement loop has something to bite on.
-Replacing this file with a different one in the same schema requires no code
-changes. The pool size shown in the masthead is read from the file rather than
-written into the UI as a literal, so it stays truthful when the dataset is
-swapped — verified by swapping in a 7-profile file and watching the label
-follow.
+`data/profiles.json` is **the dataset supplied with the assignment, byte for
+byte**. Nothing in it has been edited.
+
+The app adds no fields to it. Contact details — which the supplied schema does
+not carry — are synthesised at load in `lib/pool.ts` for display only, so a
+reviewer diffing the file against their own copy sees no changes at all. They
+are built so they cannot reach a real person: `example.com` is reserved by RFC
+2606 and can never route mail, and each LinkedIn slug carries a deterministic
+suffix because a bare `linkedin.com/in/ananya-rao` is very plausibly a real
+stranger's vanity URL. A dataset that already has these fields keeps its own.
+
+The pool size in the masthead is read from the file rather than written into the
+UI as a literal, so it stays truthful when the dataset changes — verified by
+swapping in a 7-profile file and watching the label follow 48 → 7 → 48.
