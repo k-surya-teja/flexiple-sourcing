@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, Icon, ScoreBadge } from "./Primitives";
+import { Chip, CopyField, Icon, ScoreBadge } from "./Primitives";
 import type { Rubric } from "@/lib/schemas";
 import type { SearchResult } from "@/lib/client";
 
@@ -142,6 +142,19 @@ export function ProfileCard({
           {score.claims.dropped} unverified {score.claims.dropped === 1 ? "claim" : "claims"} hidden — the model
           cited something this profile does not say.
         </p>
+      )}
+
+      {(profile.email || profile.linkedin) && (
+        <div className="mt-3 flex flex-wrap items-baseline gap-x-5 gap-y-1.5">
+          {profile.email && <CopyField label="mail" value={profile.email} />}
+          {profile.linkedin && (
+            <CopyField
+              label="linkedin"
+              value={profile.linkedin}
+              display={profile.linkedin.replace(/^linkedin\.com/, "")}
+            />
+          )}
+        </div>
       )}
 
       {!frozen && onReact && (

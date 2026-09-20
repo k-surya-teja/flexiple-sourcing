@@ -7,10 +7,25 @@
     "location": "Bangalore",
     "current_company": "NimbusPay",
     "current_company_type": "startup",
-    "skills": ["Node.js", "PostgreSQL", "AWS RDS", "Redis", "TypeScript"],
-    "past_companies": [{"company": "Zeta", "company_type": "scaleup", "title": "Backend Engineer", "years": 3}],
+    "skills": [
+      "Node.js",
+      "PostgreSQL",
+      "AWS RDS",
+      "Redis",
+      "TypeScript"
+    ],
+    "past_companies": [
+      {
+        "company": "Zeta",
+        "company_type": "scaleup",
+        "title": "Backend Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.E. Computer Science, BITS Pilani",
-    "summary": "Backend engineer who has spent most of her career building payments infrastructure at early-stage startups."
+    "summary": "Backend engineer who has spent most of her career building payments infrastructure at early-stage startups.",
+    "linkedin": "linkedin.com/in/ananya-rao-093394",
+    "email": "ananya.rao@example.com"
   },
   {
     "id": "p02",
@@ -20,10 +35,26 @@
     "location": "Bangalore",
     "current_company": "Klarity Health",
     "current_company_type": "startup",
-    "skills": ["Python", "Django", "AWS RDS", "PostgreSQL", "Celery", "Docker"],
-    "past_companies": [{"company": "Practo", "company_type": "scaleup", "title": "Software Engineer", "years": 2}],
+    "skills": [
+      "Python",
+      "Django",
+      "AWS RDS",
+      "PostgreSQL",
+      "Celery",
+      "Docker"
+    ],
+    "past_companies": [
+      {
+        "company": "Practo",
+        "company_type": "scaleup",
+        "title": "Software Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.Tech Information Technology, NIT Calicut",
-    "summary": "Builds appointment and claims backends for a seed-stage health startup; owns the RDS Postgres cluster and its migration tooling."
+    "summary": "Builds appointment and claims backends for a seed-stage health startup; owns the RDS Postgres cluster and its migration tooling.",
+    "linkedin": "linkedin.com/in/rohit-menon-5a50fd",
+    "email": "rohit.menon@example.com"
   },
   {
     "id": "p03",
@@ -33,10 +64,32 @@
     "location": "Bangalore",
     "current_company": "ShopLoop",
     "current_company_type": "startup",
-    "skills": ["Java", "Spring Boot", "AWS RDS", "MySQL", "Kafka", "Elasticsearch"],
-    "past_companies": [{"company": "Flipkart", "company_type": "enterprise", "title": "SDE II", "years": 3}, {"company": "Grofers", "company_type": "scaleup", "title": "Backend Engineer", "years": 2}],
+    "skills": [
+      "Java",
+      "Spring Boot",
+      "AWS RDS",
+      "MySQL",
+      "Kafka",
+      "Elasticsearch"
+    ],
+    "past_companies": [
+      {
+        "company": "Flipkart",
+        "company_type": "enterprise",
+        "title": "SDE II",
+        "years": 3
+      },
+      {
+        "company": "Grofers",
+        "company_type": "scaleup",
+        "title": "Backend Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.Tech Computer Science, VIT Vellore",
-    "summary": "Commerce backend engineer running catalogue and order services on RDS MySQL for a Series A retail startup."
+    "summary": "Commerce backend engineer running catalogue and order services on RDS MySQL for a Series A retail startup.",
+    "linkedin": "linkedin.com/in/priya-nair-4eb5f2",
+    "email": "priya.nair@example.com"
   },
   {
     "id": "p04",
@@ -46,10 +99,25 @@
     "location": "Bangalore",
     "current_company": "FleetIQ",
     "current_company_type": "startup",
-    "skills": ["Go", "PostgreSQL", "AWS RDS", "Docker", "gRPC"],
-    "past_companies": [{"company": "Locus", "company_type": "startup", "title": "Software Engineer", "years": 2}],
+    "skills": [
+      "Go",
+      "PostgreSQL",
+      "AWS RDS",
+      "Docker",
+      "gRPC"
+    ],
+    "past_companies": [
+      {
+        "company": "Locus",
+        "company_type": "startup",
+        "title": "Software Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.E. Information Science, RV College of Engineering",
-    "summary": "Logistics backend engineer; wrote the routing service that reads from a read-replica heavy RDS Postgres setup."
+    "summary": "Logistics backend engineer; wrote the routing service that reads from a read-replica heavy RDS Postgres setup.",
+    "linkedin": "linkedin.com/in/kabir-shah-bdba12",
+    "email": "kabir.shah@example.com"
   },
   {
     "id": "p05",
@@ -59,10 +127,26 @@
     "location": "Bangalore",
     "current_company": "Hoppr",
     "current_company_type": "startup",
-    "skills": ["Python", "AWS RDS", "Aurora", "Terraform", "Kubernetes", "PostgreSQL"],
-    "past_companies": [{"company": "Swiggy", "company_type": "scaleup", "title": "Platform Engineer", "years": 3}],
+    "skills": [
+      "Python",
+      "AWS RDS",
+      "Aurora",
+      "Terraform",
+      "Kubernetes",
+      "PostgreSQL"
+    ],
+    "past_companies": [
+      {
+        "company": "Swiggy",
+        "company_type": "scaleup",
+        "title": "Platform Engineer",
+        "years": 3
+      }
+    ],
     "education": "M.Tech Computer Science, IIT Madras",
-    "summary": "Owns the data platform at a travel startup; migrated the fleet from self-managed Postgres to Aurora RDS with zero downtime."
+    "summary": "Owns the data platform at a travel startup; migrated the fleet from self-managed Postgres to Aurora RDS with zero downtime.",
+    "linkedin": "linkedin.com/in/sneha-iyer-3dfcc8",
+    "email": "sneha.iyer@example.com"
   },
   {
     "id": "p06",
@@ -72,10 +156,26 @@
     "location": "Bangalore",
     "current_company": "PayCircle",
     "current_company_type": "startup",
-    "skills": ["Node.js", "AWS RDS", "PostgreSQL", "GraphQL", "TypeScript", "Redis"],
-    "past_companies": [{"company": "Razorpay", "company_type": "scaleup", "title": "Backend Engineer", "years": 4}],
+    "skills": [
+      "Node.js",
+      "AWS RDS",
+      "PostgreSQL",
+      "GraphQL",
+      "TypeScript",
+      "Redis"
+    ],
+    "past_companies": [
+      {
+        "company": "Razorpay",
+        "company_type": "scaleup",
+        "title": "Backend Engineer",
+        "years": 4
+      }
+    ],
     "education": "B.Tech Computer Science, IIIT Hyderabad",
-    "summary": "Payments engineer who has built ledger and settlement systems at two fintech startups, both on RDS Postgres."
+    "summary": "Payments engineer who has built ledger and settlement systems at two fintech startups, both on RDS Postgres.",
+    "linkedin": "linkedin.com/in/arjun-desai-6d34bd",
+    "email": "arjun.desai@example.com"
   },
   {
     "id": "p07",
@@ -85,10 +185,32 @@
     "location": "Bangalore",
     "current_company": "Continua",
     "current_company_type": "startup",
-    "skills": ["Java", "AWS RDS", "PostgreSQL", "Kafka", "System Design", "Kubernetes"],
-    "past_companies": [{"company": "Amazon", "company_type": "enterprise", "title": "SDE III", "years": 5}, {"company": "Myntra", "company_type": "scaleup", "title": "Senior Engineer", "years": 3}],
+    "skills": [
+      "Java",
+      "AWS RDS",
+      "PostgreSQL",
+      "Kafka",
+      "System Design",
+      "Kubernetes"
+    ],
+    "past_companies": [
+      {
+        "company": "Amazon",
+        "company_type": "enterprise",
+        "title": "SDE III",
+        "years": 5
+      },
+      {
+        "company": "Myntra",
+        "company_type": "scaleup",
+        "title": "Senior Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.Tech Computer Science, IIT Bombay",
-    "summary": "Principal engineer setting backend architecture for a Series B startup; deep RDS and Postgres tuning background but now largely in design reviews."
+    "summary": "Principal engineer setting backend architecture for a Series B startup; deep RDS and Postgres tuning background but now largely in design reviews.",
+    "linkedin": "linkedin.com/in/vikram-sethi-0c5704",
+    "email": "vikram.sethi@example.com"
   },
   {
     "id": "p08",
@@ -98,10 +220,25 @@
     "location": "Bangalore",
     "current_company": "Chargebee",
     "current_company_type": "scaleup",
-    "skills": ["Ruby", "PostgreSQL", "AWS RDS", "Sidekiq", "Terraform"],
-    "past_companies": [{"company": "Freshworks", "company_type": "scaleup", "title": "Senior Engineer", "years": 4}],
+    "skills": [
+      "Ruby",
+      "PostgreSQL",
+      "AWS RDS",
+      "Sidekiq",
+      "Terraform"
+    ],
+    "past_companies": [
+      {
+        "company": "Freshworks",
+        "company_type": "scaleup",
+        "title": "Senior Engineer",
+        "years": 4
+      }
+    ],
     "education": "B.E. Computer Science, Anna University",
-    "summary": "Staff engineer on billing infrastructure; led the shard split of a multi-terabyte RDS Postgres database."
+    "summary": "Staff engineer on billing infrastructure; led the shard split of a multi-terabyte RDS Postgres database.",
+    "linkedin": "linkedin.com/in/meera-krishnan-4272f5",
+    "email": "meera.krishnan@example.com"
   },
   {
     "id": "p09",
@@ -111,10 +248,18 @@
     "location": "Bangalore",
     "current_company": "Skiff Labs",
     "current_company_type": "startup",
-    "skills": ["Node.js", "PostgreSQL", "AWS RDS", "Express", "TypeScript"],
+    "skills": [
+      "Node.js",
+      "PostgreSQL",
+      "AWS RDS",
+      "Express",
+      "TypeScript"
+    ],
     "past_companies": [],
     "education": "B.Tech Computer Science, PES University",
-    "summary": "Second engineering hire at a pre-seed startup; built the entire API layer on RDS Postgres but has only three years in the industry."
+    "summary": "Second engineering hire at a pre-seed startup; built the entire API layer on RDS Postgres but has only three years in the industry.",
+    "linkedin": "linkedin.com/in/tanvi-bhatt-5ef859",
+    "email": "tanvi.bhatt@example.com"
   },
   {
     "id": "p10",
@@ -124,10 +269,17 @@
     "location": "Bangalore",
     "current_company": "Nudge",
     "current_company_type": "startup",
-    "skills": ["Node.js", "PostgreSQL", "React", "AWS"],
+    "skills": [
+      "Node.js",
+      "PostgreSQL",
+      "React",
+      "AWS"
+    ],
     "past_companies": [],
     "education": "B.E. Computer Science, MS Ramaiah Institute of Technology",
-    "summary": "Junior full-stack engineer at an early-stage startup, mostly shipping CRUD features under a senior engineer's review."
+    "summary": "Junior full-stack engineer at an early-stage startup, mostly shipping CRUD features under a senior engineer's review.",
+    "linkedin": "linkedin.com/in/aditya-rane-af2051",
+    "email": "aditya.rane@example.com"
   },
   {
     "id": "p11",
@@ -137,10 +289,25 @@
     "location": "Hyderabad",
     "current_company": "Vantage Labs",
     "current_company_type": "startup",
-    "skills": ["Python", "FastAPI", "AWS RDS", "PostgreSQL", "Redis"],
-    "past_companies": [{"company": "Darwinbox", "company_type": "scaleup", "title": "Backend Engineer", "years": 3}],
+    "skills": [
+      "Python",
+      "FastAPI",
+      "AWS RDS",
+      "PostgreSQL",
+      "Redis"
+    ],
+    "past_companies": [
+      {
+        "company": "Darwinbox",
+        "company_type": "scaleup",
+        "title": "Backend Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.Tech Computer Science, IIIT Hyderabad",
-    "summary": "HR-tech backend engineer with strong RDS Postgres experience, based in Hyderabad and not currently looking to relocate."
+    "summary": "HR-tech backend engineer with strong RDS Postgres experience, based in Hyderabad and not currently looking to relocate.",
+    "linkedin": "linkedin.com/in/farhan-qureshi-86fe14",
+    "email": "farhan.qureshi@example.com"
   },
   {
     "id": "p12",
@@ -150,10 +317,25 @@
     "location": "Pune",
     "current_company": "Mindtickle",
     "current_company_type": "scaleup",
-    "skills": ["Java", "AWS RDS", "PostgreSQL", "Spring Boot", "AWS"],
-    "past_companies": [{"company": "Cygnet", "company_type": "agency", "title": "Software Engineer", "years": 2}],
+    "skills": [
+      "Java",
+      "AWS RDS",
+      "PostgreSQL",
+      "Spring Boot",
+      "AWS"
+    ],
+    "past_companies": [
+      {
+        "company": "Cygnet",
+        "company_type": "agency",
+        "title": "Software Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.E. Computer Engineering, College of Engineering Pune",
-    "summary": "Sales-enablement backend engineer in Pune; comfortable with RDS but has never worked at an early-stage company."
+    "summary": "Sales-enablement backend engineer in Pune; comfortable with RDS but has never worked at an early-stage company.",
+    "linkedin": "linkedin.com/in/divya-pillai-ea299e",
+    "email": "divya.pillai@example.com"
   },
   {
     "id": "p13",
@@ -163,10 +345,25 @@
     "location": "Remote (India)",
     "current_company": "Refold",
     "current_company_type": "startup",
-    "skills": ["Node.js", "AWS RDS", "PostgreSQL", "TypeScript", "Serverless"],
-    "past_companies": [{"company": "Hasura", "company_type": "startup", "title": "Backend Engineer", "years": 3}],
+    "skills": [
+      "Node.js",
+      "AWS RDS",
+      "PostgreSQL",
+      "TypeScript",
+      "Serverless"
+    ],
+    "past_companies": [
+      {
+        "company": "Hasura",
+        "company_type": "startup",
+        "title": "Backend Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.Tech Electronics, NIT Surathkal",
-    "summary": "Fully remote backend engineer at a US startup; deep Postgres and RDS work, but has declined on-site roles twice."
+    "summary": "Fully remote backend engineer at a US startup; deep Postgres and RDS work, but has declined on-site roles twice.",
+    "linkedin": "linkedin.com/in/nikhil-joshi-f3af43",
+    "email": "nikhil.joshi@example.com"
   },
   {
     "id": "p14",
@@ -176,10 +373,25 @@
     "location": "Bangalore",
     "current_company": "Corvantis Systems",
     "current_company_type": "enterprise",
-    "skills": ["Java", "Oracle", "AWS RDS", "SQL", "Spring"],
-    "past_companies": [{"company": "Infosys", "company_type": "enterprise", "title": "Systems Engineer", "years": 3}],
+    "skills": [
+      "Java",
+      "Oracle",
+      "AWS RDS",
+      "SQL",
+      "Spring"
+    ],
+    "past_companies": [
+      {
+        "company": "Infosys",
+        "company_type": "enterprise",
+        "title": "Systems Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.E. Computer Science, PSG College of Technology",
-    "summary": "Enterprise services engineer maintaining a banking client's Java stack; migrated some workloads to AWS RDS but has only ever worked in large IT organisations."
+    "summary": "Enterprise services engineer maintaining a banking client's Java stack; migrated some workloads to AWS RDS but has only ever worked in large IT organisations.",
+    "linkedin": "linkedin.com/in/ramesh-subramanian-c51ed2",
+    "email": "ramesh.subramanian@example.com"
   },
   {
     "id": "p15",
@@ -189,10 +401,25 @@
     "location": "Bangalore",
     "current_company": "Accenture",
     "current_company_type": "enterprise",
-    "skills": [".NET", "SQL Server", "AWS RDS", "C#", "Azure"],
-    "past_companies": [{"company": "Capgemini", "company_type": "enterprise", "title": "Associate Engineer", "years": 2}],
+    "skills": [
+      ".NET",
+      "SQL Server",
+      "AWS RDS",
+      "C#",
+      "Azure"
+    ],
+    "past_companies": [
+      {
+        "company": "Capgemini",
+        "company_type": "enterprise",
+        "title": "Associate Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.Tech Computer Science, Amity University",
-    "summary": "Enterprise .NET engineer on a retail client project; RDS exposure is limited to a single lift-and-shift migration."
+    "summary": "Enterprise .NET engineer on a retail client project; RDS exposure is limited to a single lift-and-shift migration.",
+    "linkedin": "linkedin.com/in/anjali-verma-40c058",
+    "email": "anjali.verma@example.com"
   },
   {
     "id": "p16",
@@ -202,10 +429,25 @@
     "location": "Bangalore",
     "current_company": "Wavelength",
     "current_company_type": "startup",
-    "skills": ["Node.js", "MongoDB", "Redis", "TypeScript", "AWS"],
-    "past_companies": [{"company": "Dunzo", "company_type": "startup", "title": "Software Engineer", "years": 2}],
+    "skills": [
+      "Node.js",
+      "MongoDB",
+      "Redis",
+      "TypeScript",
+      "AWS"
+    ],
+    "past_companies": [
+      {
+        "company": "Dunzo",
+        "company_type": "startup",
+        "title": "Software Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.E. Computer Science, BMS College of Engineering",
-    "summary": "Strong startup backend engineer in Bangalore, but his entire career has been on MongoDB with no relational database ownership."
+    "summary": "Strong startup backend engineer in Bangalore, but his entire career has been on MongoDB with no relational database ownership.",
+    "linkedin": "linkedin.com/in/suresh-gowda-c3a1e0",
+    "email": "suresh.gowda@example.com"
   },
   {
     "id": "p17",
@@ -215,10 +457,25 @@
     "location": "Bangalore",
     "current_company": "Truckly",
     "current_company_type": "startup",
-    "skills": ["Java", "MySQL", "Spring Boot", "RabbitMQ", "Docker"],
-    "past_companies": [{"company": "Ola", "company_type": "scaleup", "title": "Backend Engineer", "years": 3}],
+    "skills": [
+      "Java",
+      "MySQL",
+      "Spring Boot",
+      "RabbitMQ",
+      "Docker"
+    ],
+    "past_companies": [
+      {
+        "company": "Ola",
+        "company_type": "scaleup",
+        "title": "Backend Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.Tech Computer Science, JNTU Hyderabad",
-    "summary": "Logistics backend engineer running self-hosted MySQL on EC2; has never used a managed RDS instance."
+    "summary": "Logistics backend engineer running self-hosted MySQL on EC2; has never used a managed RDS instance.",
+    "linkedin": "linkedin.com/in/lavanya-reddy-cf86b3",
+    "email": "lavanya.reddy@example.com"
   },
   {
     "id": "p18",
@@ -228,10 +485,25 @@
     "location": "Bangalore",
     "current_company": "Pixelvault Studios",
     "current_company_type": "agency",
-    "skills": ["PHP", "Laravel", "MySQL", "AWS RDS", "jQuery"],
-    "past_companies": [{"company": "Webchutney", "company_type": "agency", "title": "Web Developer", "years": 3}],
+    "skills": [
+      "PHP",
+      "Laravel",
+      "MySQL",
+      "AWS RDS",
+      "jQuery"
+    ],
+    "past_companies": [
+      {
+        "company": "Webchutney",
+        "company_type": "agency",
+        "title": "Web Developer",
+        "years": 3
+      }
+    ],
     "education": "BCA, Bangalore University",
-    "summary": "Agency backend developer shipping client websites on Laravel and RDS MySQL; no product company experience."
+    "summary": "Agency backend developer shipping client websites on Laravel and RDS MySQL; no product company experience.",
+    "linkedin": "linkedin.com/in/imran-sheikh-034e74",
+    "email": "imran.sheikh@example.com"
   },
   {
     "id": "p19",
@@ -241,10 +513,25 @@
     "location": "Bangalore",
     "current_company": "Canvasly",
     "current_company_type": "startup",
-    "skills": ["React", "TypeScript", "Next.js", "Tailwind CSS", "GraphQL"],
-    "past_companies": [{"company": "Zomato", "company_type": "scaleup", "title": "Frontend Engineer", "years": 3}],
+    "skills": [
+      "React",
+      "TypeScript",
+      "Next.js",
+      "Tailwind CSS",
+      "GraphQL"
+    ],
+    "past_companies": [
+      {
+        "company": "Zomato",
+        "company_type": "scaleup",
+        "title": "Frontend Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.Des Interaction Design, NID Ahmedabad",
-    "summary": "Design-minded frontend engineer who has owned the entire web client at a design-tools startup."
+    "summary": "Design-minded frontend engineer who has owned the entire web client at a design-tools startup.",
+    "linkedin": "linkedin.com/in/rhea-kapoor-96b644",
+    "email": "rhea.kapoor@example.com"
   },
   {
     "id": "p20",
@@ -254,10 +541,25 @@
     "location": "Bangalore",
     "current_company": "Meesho",
     "current_company_type": "scaleup",
-    "skills": ["React", "Redux", "JavaScript", "CSS", "Jest"],
-    "past_companies": [{"company": "Unacademy", "company_type": "scaleup", "title": "Frontend Engineer", "years": 2}],
+    "skills": [
+      "React",
+      "Redux",
+      "JavaScript",
+      "CSS",
+      "Jest"
+    ],
+    "past_companies": [
+      {
+        "company": "Unacademy",
+        "company_type": "scaleup",
+        "title": "Frontend Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.Tech Computer Science, KIIT Bhubaneswar",
-    "summary": "Frontend engineer on a high-traffic commerce app, focused on performance and rendering on low-end devices."
+    "summary": "Frontend engineer on a high-traffic commerce app, focused on performance and rendering on low-end devices.",
+    "linkedin": "linkedin.com/in/sameer-das-12a5e5",
+    "email": "sameer.das@example.com"
   },
   {
     "id": "p21",
@@ -267,10 +569,25 @@
     "location": "Bangalore",
     "current_company": "SAP Labs",
     "current_company_type": "enterprise",
-    "skills": ["Angular", "TypeScript", "RxJS", "Web Components", "Accessibility"],
-    "past_companies": [{"company": "Oracle", "company_type": "enterprise", "title": "Senior Engineer", "years": 4}],
+    "skills": [
+      "Angular",
+      "TypeScript",
+      "RxJS",
+      "Web Components",
+      "Accessibility"
+    ],
+    "past_companies": [
+      {
+        "company": "Oracle",
+        "company_type": "enterprise",
+        "title": "Senior Engineer",
+        "years": 4
+      }
+    ],
     "education": "M.S. Computer Science, IIIT Bangalore",
-    "summary": "Staff frontend engineer building enterprise design-system components; long tenure inside large organisations."
+    "summary": "Staff frontend engineer building enterprise design-system components; long tenure inside large organisations.",
+    "linkedin": "linkedin.com/in/nandini-rao-201d21",
+    "email": "nandini.rao@example.com"
   },
   {
     "id": "p22",
@@ -280,10 +597,24 @@
     "location": "Bangalore",
     "current_company": "Beam",
     "current_company_type": "startup",
-    "skills": ["Kotlin", "Jetpack Compose", "Android SDK", "Coroutines"],
-    "past_companies": [{"company": "PhonePe", "company_type": "scaleup", "title": "Android Engineer", "years": 3}],
+    "skills": [
+      "Kotlin",
+      "Jetpack Compose",
+      "Android SDK",
+      "Coroutines"
+    ],
+    "past_companies": [
+      {
+        "company": "PhonePe",
+        "company_type": "scaleup",
+        "title": "Android Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.Tech Computer Science, Delhi Technological University",
-    "summary": "Android engineer who rebuilt a consumer fintech app in Compose at a Series A startup."
+    "summary": "Android engineer who rebuilt a consumer fintech app in Compose at a Series A startup.",
+    "linkedin": "linkedin.com/in/yash-agarwal-02766f",
+    "email": "yash.agarwal@example.com"
   },
   {
     "id": "p23",
@@ -293,10 +624,24 @@
     "location": "Mumbai",
     "current_company": "Tonic",
     "current_company_type": "startup",
-    "skills": ["Swift", "SwiftUI", "Combine", "Core Data"],
-    "past_companies": [{"company": "CRED", "company_type": "scaleup", "title": "iOS Engineer", "years": 3}],
+    "skills": [
+      "Swift",
+      "SwiftUI",
+      "Combine",
+      "Core Data"
+    ],
+    "past_companies": [
+      {
+        "company": "CRED",
+        "company_type": "scaleup",
+        "title": "iOS Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.E. Information Technology, VJTI Mumbai",
-    "summary": "iOS engineer with a strong animation and offline-sync background at consumer fintech companies."
+    "summary": "iOS engineer with a strong animation and offline-sync background at consumer fintech companies.",
+    "linkedin": "linkedin.com/in/ishaan-malhotra-7731db",
+    "email": "ishaan.malhotra@example.com"
   },
   {
     "id": "p24",
@@ -306,10 +651,24 @@
     "location": "Bangalore",
     "current_company": "Brightbox Digital",
     "current_company_type": "agency",
-    "skills": ["Dart", "Flutter", "Firebase", "REST APIs"],
-    "past_companies": [{"company": "Robosoft", "company_type": "agency", "title": "Mobile Developer", "years": 2}],
+    "skills": [
+      "Dart",
+      "Flutter",
+      "Firebase",
+      "REST APIs"
+    ],
+    "past_companies": [
+      {
+        "company": "Robosoft",
+        "company_type": "agency",
+        "title": "Mobile Developer",
+        "years": 2
+      }
+    ],
     "education": "B.E. Computer Science, NMAM Institute of Technology",
-    "summary": "Cross-platform mobile developer delivering client apps on fixed timelines at digital agencies."
+    "summary": "Cross-platform mobile developer delivering client apps on fixed timelines at digital agencies.",
+    "linkedin": "linkedin.com/in/pooja-hegde-69a88b",
+    "email": "pooja.hegde@example.com"
   },
   {
     "id": "p25",
@@ -319,10 +678,25 @@
     "location": "Bangalore",
     "current_company": "Zeta",
     "current_company_type": "scaleup",
-    "skills": ["Spark", "Airflow", "Snowflake", "PostgreSQL", "Python"],
-    "past_companies": [{"company": "Mu Sigma", "company_type": "enterprise", "title": "Data Analyst", "years": 3}],
+    "skills": [
+      "Spark",
+      "Airflow",
+      "Snowflake",
+      "PostgreSQL",
+      "Python"
+    ],
+    "past_companies": [
+      {
+        "company": "Mu Sigma",
+        "company_type": "enterprise",
+        "title": "Data Analyst",
+        "years": 3
+      }
+    ],
     "education": "M.Sc Statistics, Christ University",
-    "summary": "Data engineer owning the batch pipeline that feeds a banking-as-a-service reporting layer."
+    "summary": "Data engineer owning the batch pipeline that feeds a banking-as-a-service reporting layer.",
+    "linkedin": "linkedin.com/in/karthik-iyengar-9211ef",
+    "email": "karthik.iyengar@example.com"
   },
   {
     "id": "p26",
@@ -332,10 +706,26 @@
     "location": "Bangalore",
     "current_company": "Streamline",
     "current_company_type": "startup",
-    "skills": ["dbt", "Snowflake", "AWS RDS", "PostgreSQL", "Python", "Airflow"],
-    "past_companies": [{"company": "Gojek", "company_type": "scaleup", "title": "Data Engineer", "years": 4}],
+    "skills": [
+      "dbt",
+      "Snowflake",
+      "AWS RDS",
+      "PostgreSQL",
+      "Python",
+      "Airflow"
+    ],
+    "past_companies": [
+      {
+        "company": "Gojek",
+        "company_type": "scaleup",
+        "title": "Data Engineer",
+        "years": 4
+      }
+    ],
     "education": "B.Tech Computer Science, SRM University",
-    "summary": "Data engineer at a seed-stage analytics startup; reads heavily from RDS Postgres replicas but does not build application backends."
+    "summary": "Data engineer at a seed-stage analytics startup; reads heavily from RDS Postgres replicas but does not build application backends.",
+    "linkedin": "linkedin.com/in/shruti-balan-f886f7",
+    "email": "shruti.balan@example.com"
   },
   {
     "id": "p27",
@@ -345,10 +735,25 @@
     "location": "Bangalore",
     "current_company": "Loom AI Labs",
     "current_company_type": "startup",
-    "skills": ["PyTorch", "Python", "MLflow", "Transformers", "CUDA"],
-    "past_companies": [{"company": "Tredence", "company_type": "agency", "title": "Data Scientist", "years": 2}],
+    "skills": [
+      "PyTorch",
+      "Python",
+      "MLflow",
+      "Transformers",
+      "CUDA"
+    ],
+    "past_companies": [
+      {
+        "company": "Tredence",
+        "company_type": "agency",
+        "title": "Data Scientist",
+        "years": 2
+      }
+    ],
     "education": "M.Tech Artificial Intelligence, IISc Bangalore",
-    "summary": "ML engineer training and serving recommendation models at an early-stage AI startup."
+    "summary": "ML engineer training and serving recommendation models at an early-stage AI startup.",
+    "linkedin": "linkedin.com/in/manish-tiwari-f55b6a",
+    "email": "manish.tiwari@example.com"
   },
   {
     "id": "p28",
@@ -358,10 +763,25 @@
     "location": "Bangalore",
     "current_company": "Sarvam Systems",
     "current_company_type": "scaleup",
-    "skills": ["TensorFlow", "Python", "Kubeflow", "MLOps", "AWS SageMaker"],
-    "past_companies": [{"company": "Microsoft", "company_type": "enterprise", "title": "Applied Scientist", "years": 4}],
+    "skills": [
+      "TensorFlow",
+      "Python",
+      "Kubeflow",
+      "MLOps",
+      "AWS SageMaker"
+    ],
+    "past_companies": [
+      {
+        "company": "Microsoft",
+        "company_type": "enterprise",
+        "title": "Applied Scientist",
+        "years": 4
+      }
+    ],
     "education": "Ph.D. Machine Learning, IIT Delhi",
-    "summary": "Applied ML lead who has taken three speech models from research to production serving."
+    "summary": "Applied ML lead who has taken three speech models from research to production serving.",
+    "linkedin": "linkedin.com/in/aisha-khan-c2b44b",
+    "email": "aisha.khan@example.com"
   },
   {
     "id": "p29",
@@ -371,10 +791,24 @@
     "location": "Delhi",
     "current_company": "Deloitte",
     "current_company_type": "enterprise",
-    "skills": ["Python", "SQL", "Tableau", "scikit-learn"],
-    "past_companies": [{"company": "EXL Service", "company_type": "enterprise", "title": "Analyst", "years": 2}],
+    "skills": [
+      "Python",
+      "SQL",
+      "Tableau",
+      "scikit-learn"
+    ],
+    "past_companies": [
+      {
+        "company": "EXL Service",
+        "company_type": "enterprise",
+        "title": "Analyst",
+        "years": 2
+      }
+    ],
     "education": "MBA Business Analytics, IIM Lucknow",
-    "summary": "Consulting data scientist building forecasting models for retail clients."
+    "summary": "Consulting data scientist building forecasting models for retail clients.",
+    "linkedin": "linkedin.com/in/gaurav-pandey-4ca85a",
+    "email": "gaurav.pandey@example.com"
   },
   {
     "id": "p30",
@@ -384,10 +818,26 @@
     "location": "Bangalore",
     "current_company": "Orbital",
     "current_company_type": "startup",
-    "skills": ["Kubernetes", "Terraform", "AWS", "AWS RDS", "Prometheus", "Python"],
-    "past_companies": [{"company": "Postman", "company_type": "scaleup", "title": "SRE", "years": 2}],
+    "skills": [
+      "Kubernetes",
+      "Terraform",
+      "AWS",
+      "AWS RDS",
+      "Prometheus",
+      "Python"
+    ],
+    "past_companies": [
+      {
+        "company": "Postman",
+        "company_type": "scaleup",
+        "title": "SRE",
+        "years": 2
+      }
+    ],
     "education": "B.E. Computer Science, Manipal Institute of Technology",
-    "summary": "DevOps engineer who provisions and monitors RDS instances for a startup's fleet, but writes little application code."
+    "summary": "DevOps engineer who provisions and monitors RDS instances for a startup's fleet, but writes little application code.",
+    "linkedin": "linkedin.com/in/deepak-nayak-b0ba4e",
+    "email": "deepak.nayak@example.com"
   },
   {
     "id": "p31",
@@ -397,10 +847,25 @@
     "location": "Bangalore",
     "current_company": "Razorpay",
     "current_company_type": "scaleup",
-    "skills": ["Kubernetes", "Prometheus", "Go", "AWS", "Incident Response"],
-    "past_companies": [{"company": "Yahoo", "company_type": "enterprise", "title": "Operations Engineer", "years": 3}],
+    "skills": [
+      "Kubernetes",
+      "Prometheus",
+      "Go",
+      "AWS",
+      "Incident Response"
+    ],
+    "past_companies": [
+      {
+        "company": "Yahoo",
+        "company_type": "enterprise",
+        "title": "Operations Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.Tech Computer Science, Jadavpur University",
-    "summary": "SRE owning the on-call and reliability programme for a payments platform at scale."
+    "summary": "SRE owning the on-call and reliability programme for a payments platform at scale.",
+    "linkedin": "linkedin.com/in/ritika-sen-1350f1",
+    "email": "ritika.sen@example.com"
   },
   {
     "id": "p32",
@@ -410,10 +875,25 @@
     "location": "Bangalore",
     "current_company": "Wipro",
     "current_company_type": "enterprise",
-    "skills": ["AWS", "Azure", "Solution Architecture", "AWS RDS", "Migration"],
-    "past_companies": [{"company": "IBM", "company_type": "enterprise", "title": "Technical Lead", "years": 5}],
+    "skills": [
+      "AWS",
+      "Azure",
+      "Solution Architecture",
+      "AWS RDS",
+      "Migration"
+    ],
+    "past_companies": [
+      {
+        "company": "IBM",
+        "company_type": "enterprise",
+        "title": "Technical Lead",
+        "years": 5
+      }
+    ],
     "education": "B.E. Electronics, Visvesvaraya Technological University",
-    "summary": "Cloud architect leading large enterprise migrations; hands-off from day-to-day coding for several years."
+    "summary": "Cloud architect leading large enterprise migrations; hands-off from day-to-day coding for several years.",
+    "linkedin": "linkedin.com/in/vivek-chandra-9846d5",
+    "email": "vivek.chandra@example.com"
   },
   {
     "id": "p33",
@@ -423,10 +903,25 @@
     "location": "Bangalore",
     "current_company": "Vahan",
     "current_company_type": "startup",
-    "skills": ["Selenium", "Python", "Pytest", "CI/CD", "Postman"],
-    "past_companies": [{"company": "Aricent", "company_type": "enterprise", "title": "QA Engineer", "years": 2}],
+    "skills": [
+      "Selenium",
+      "Python",
+      "Pytest",
+      "CI/CD",
+      "Postman"
+    ],
+    "past_companies": [
+      {
+        "company": "Aricent",
+        "company_type": "enterprise",
+        "title": "QA Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.Tech Computer Science, Galgotias University",
-    "summary": "Automation engineer who built the regression suite for a hiring marketplace at a startup."
+    "summary": "Automation engineer who built the regression suite for a hiring marketplace at a startup.",
+    "linkedin": "linkedin.com/in/neha-gupta-a74f1f",
+    "email": "neha.gupta@example.com"
   },
   {
     "id": "p34",
@@ -436,10 +931,25 @@
     "location": "Chennai",
     "current_company": "Freshworks",
     "current_company_type": "scaleup",
-    "skills": ["Java", "TestNG", "Selenium", "REST Assured", "Jenkins"],
-    "past_companies": [{"company": "Cognizant", "company_type": "enterprise", "title": "Test Engineer", "years": 3}],
+    "skills": [
+      "Java",
+      "TestNG",
+      "Selenium",
+      "REST Assured",
+      "Jenkins"
+    ],
+    "past_companies": [
+      {
+        "company": "Cognizant",
+        "company_type": "enterprise",
+        "title": "Test Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.E. Computer Science, SSN College of Engineering",
-    "summary": "SDET maintaining API and UI test infrastructure for a SaaS suite."
+    "summary": "SDET maintaining API and UI test infrastructure for a SaaS suite.",
+    "linkedin": "linkedin.com/in/siddharth-bose-44fa57",
+    "email": "siddharth.bose@example.com"
   },
   {
     "id": "p35",
@@ -449,10 +959,25 @@
     "location": "Bangalore",
     "current_company": "Kites",
     "current_company_type": "startup",
-    "skills": ["Node.js", "React", "PostgreSQL", "TypeScript", "AWS"],
-    "past_companies": [{"company": "Zolve", "company_type": "startup", "title": "Software Engineer", "years": 2}],
+    "skills": [
+      "Node.js",
+      "React",
+      "PostgreSQL",
+      "TypeScript",
+      "AWS"
+    ],
+    "past_companies": [
+      {
+        "company": "Zolve",
+        "company_type": "startup",
+        "title": "Software Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.Tech Computer Science, IIIT Allahabad",
-    "summary": "Full-stack engineer at an early-stage startup; splits time roughly evenly between React screens and Postgres-backed APIs."
+    "summary": "Full-stack engineer at an early-stage startup; splits time roughly evenly between React screens and Postgres-backed APIs.",
+    "linkedin": "linkedin.com/in/alok-mishra-06faf3",
+    "email": "alok.mishra@example.com"
   },
   {
     "id": "p36",
@@ -462,10 +987,25 @@
     "location": "Bangalore",
     "current_company": "Leap Finance",
     "current_company_type": "startup",
-    "skills": ["Django", "React", "AWS RDS", "PostgreSQL", "Celery"],
-    "past_companies": [{"company": "Cure.fit", "company_type": "scaleup", "title": "Software Engineer", "years": 3}],
+    "skills": [
+      "Django",
+      "React",
+      "AWS RDS",
+      "PostgreSQL",
+      "Celery"
+    ],
+    "past_companies": [
+      {
+        "company": "Cure.fit",
+        "company_type": "scaleup",
+        "title": "Software Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.E. Computer Science, Sir M Visvesvaraya Institute of Technology",
-    "summary": "Full-stack engineer at a fintech startup who owns the lending backend on RDS Postgres alongside its admin frontend."
+    "summary": "Full-stack engineer at a fintech startup who owns the lending backend on RDS Postgres alongside its admin frontend.",
+    "linkedin": "linkedin.com/in/kavya-srinivasan-974053",
+    "email": "kavya.srinivasan@example.com"
   },
   {
     "id": "p37",
@@ -475,10 +1015,25 @@
     "location": "Bangalore",
     "current_company": "Groww",
     "current_company_type": "scaleup",
-    "skills": ["People Management", "Java", "System Design", "PostgreSQL", "Hiring"],
-    "past_companies": [{"company": "Paytm", "company_type": "scaleup", "title": "Tech Lead", "years": 4}],
+    "skills": [
+      "People Management",
+      "Java",
+      "System Design",
+      "PostgreSQL",
+      "Hiring"
+    ],
+    "past_companies": [
+      {
+        "company": "Paytm",
+        "company_type": "scaleup",
+        "title": "Tech Lead",
+        "years": 4
+      }
+    ],
     "education": "B.Tech Computer Science, NIT Durgapur",
-    "summary": "Engineering manager running two backend squads; last wrote production code three years ago."
+    "summary": "Engineering manager running two backend squads; last wrote production code three years ago.",
+    "linkedin": "linkedin.com/in/rahul-bhattacharya-e18326",
+    "email": "rahul.bhattacharya@example.com"
   },
   {
     "id": "p38",
@@ -488,10 +1043,25 @@
     "location": "Bangalore",
     "current_company": "Untangle",
     "current_company_type": "startup",
-    "skills": ["Node.js", "AWS RDS", "PostgreSQL", "TypeScript", "System Design"],
-    "past_companies": [{"company": "BrowserStack", "company_type": "scaleup", "title": "Senior Engineer", "years": 4}],
+    "skills": [
+      "Node.js",
+      "AWS RDS",
+      "PostgreSQL",
+      "TypeScript",
+      "System Design"
+    ],
+    "past_companies": [
+      {
+        "company": "BrowserStack",
+        "company_type": "scaleup",
+        "title": "Senior Engineer",
+        "years": 4
+      }
+    ],
     "education": "B.E. Computer Science, Pune Institute of Computer Technology",
-    "summary": "Hands-on tech lead at a seed-stage startup; still writes the majority of the RDS Postgres data layer herself."
+    "summary": "Hands-on tech lead at a seed-stage startup; still writes the majority of the RDS Postgres data layer herself.",
+    "linkedin": "linkedin.com/in/sonal-mehta-927655",
+    "email": "sonal.mehta@example.com"
   },
   {
     "id": "p39",
@@ -501,10 +1071,25 @@
     "location": "Chennai",
     "current_company": "Sensara",
     "current_company_type": "startup",
-    "skills": ["Node.js", "PostgreSQL", "AWS RDS", "Redis", "Docker"],
-    "past_companies": [{"company": "Zoho", "company_type": "enterprise", "title": "Member Technical Staff", "years": 2}],
+    "skills": [
+      "Node.js",
+      "PostgreSQL",
+      "AWS RDS",
+      "Redis",
+      "Docker"
+    ],
+    "past_companies": [
+      {
+        "company": "Zoho",
+        "company_type": "enterprise",
+        "title": "Member Technical Staff",
+        "years": 2
+      }
+    ],
     "education": "B.E. Computer Science, College of Engineering Guindy",
-    "summary": "Backend engineer building media metadata services on RDS Postgres; open to relocating from Chennai."
+    "summary": "Backend engineer building media metadata services on RDS Postgres; open to relocating from Chennai.",
+    "linkedin": "linkedin.com/in/harish-kumar-8a9195",
+    "email": "harish.kumar@example.com"
   },
   {
     "id": "p40",
@@ -514,10 +1099,31 @@
     "location": "Bangalore",
     "current_company": "Settle",
     "current_company_type": "startup",
-    "skills": ["Ruby on Rails", "PostgreSQL", "AWS RDS", "Sidekiq", "GraphQL"],
-    "past_companies": [{"company": "Shopify", "company_type": "enterprise", "title": "Backend Developer", "years": 3}, {"company": "Instamojo", "company_type": "startup", "title": "Engineer", "years": 2}],
+    "skills": [
+      "Ruby on Rails",
+      "PostgreSQL",
+      "AWS RDS",
+      "Sidekiq",
+      "GraphQL"
+    ],
+    "past_companies": [
+      {
+        "company": "Shopify",
+        "company_type": "enterprise",
+        "title": "Backend Developer",
+        "years": 3
+      },
+      {
+        "company": "Instamojo",
+        "company_type": "startup",
+        "title": "Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.Tech Computer Science, Aligarh Muslim University",
-    "summary": "Fintech backend engineer who built the reconciliation engine at a payments startup on RDS Postgres."
+    "summary": "Fintech backend engineer who built the reconciliation engine at a payments startup on RDS Postgres.",
+    "linkedin": "linkedin.com/in/zoya-ansari-2054ac",
+    "email": "zoya.ansari@example.com"
   },
   {
     "id": "p41",
@@ -527,10 +1133,24 @@
     "location": "Bangalore",
     "current_company": "Nvidia",
     "current_company_type": "enterprise",
-    "skills": ["C++", "Linux", "CUDA", "Performance Profiling"],
-    "past_companies": [{"company": "Qualcomm", "company_type": "enterprise", "title": "Software Engineer", "years": 3}],
+    "skills": [
+      "C++",
+      "Linux",
+      "CUDA",
+      "Performance Profiling"
+    ],
+    "past_companies": [
+      {
+        "company": "Qualcomm",
+        "company_type": "enterprise",
+        "title": "Software Engineer",
+        "years": 3
+      }
+    ],
     "education": "M.Tech Computer Science, IIT Kanpur",
-    "summary": "Low-level systems engineer optimising GPU driver paths; no web or database backend experience."
+    "summary": "Low-level systems engineer optimising GPU driver paths; no web or database backend experience.",
+    "linkedin": "linkedin.com/in/pranav-kulkarni-d23ac2",
+    "email": "pranav.kulkarni@example.com"
   },
   {
     "id": "p42",
@@ -540,10 +1160,25 @@
     "location": "Bangalore",
     "current_company": "Cloudsec",
     "current_company_type": "scaleup",
-    "skills": ["Application Security", "Python", "Threat Modelling", "AWS", "Burp Suite"],
-    "past_companies": [{"company": "Deloitte", "company_type": "enterprise", "title": "Security Analyst", "years": 2}],
+    "skills": [
+      "Application Security",
+      "Python",
+      "Threat Modelling",
+      "AWS",
+      "Burp Suite"
+    ],
+    "past_companies": [
+      {
+        "company": "Deloitte",
+        "company_type": "enterprise",
+        "title": "Security Analyst",
+        "years": 2
+      }
+    ],
     "education": "B.Tech Information Security, Amrita University",
-    "summary": "Product security engineer running threat models and pen tests for a cloud security company."
+    "summary": "Product security engineer running threat models and pen tests for a cloud security company.",
+    "linkedin": "linkedin.com/in/ananya-sharma-f11228",
+    "email": "ananya.sharma@example.com"
   },
   {
     "id": "p43",
@@ -553,10 +1188,24 @@
     "location": "Remote (India)",
     "current_company": "Chainflux",
     "current_company_type": "startup",
-    "skills": ["Solidity", "Ethers.js", "Node.js", "Hardhat"],
-    "past_companies": [{"company": "Polygon", "company_type": "startup", "title": "Smart Contract Engineer", "years": 2}],
+    "skills": [
+      "Solidity",
+      "Ethers.js",
+      "Node.js",
+      "Hardhat"
+    ],
+    "past_companies": [
+      {
+        "company": "Polygon",
+        "company_type": "startup",
+        "title": "Smart Contract Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.Tech Computer Science, LNMIIT Jaipur",
-    "summary": "Smart contract developer auditing and shipping DeFi protocols; works fully remotely."
+    "summary": "Smart contract developer auditing and shipping DeFi protocols; works fully remotely.",
+    "linkedin": "linkedin.com/in/tarun-malviya-d7c630",
+    "email": "tarun.malviya@example.com"
   },
   {
     "id": "p44",
@@ -566,10 +1215,25 @@
     "location": "Noida",
     "current_company": "Jupiter Works",
     "current_company_type": "startup",
-    "skills": ["Node.js", "PostgreSQL", "AWS RDS", "TypeScript", "Kafka"],
-    "past_companies": [{"company": "Paytm", "company_type": "scaleup", "title": "Backend Engineer", "years": 3}],
+    "skills": [
+      "Node.js",
+      "PostgreSQL",
+      "AWS RDS",
+      "TypeScript",
+      "Kafka"
+    ],
+    "past_companies": [
+      {
+        "company": "Paytm",
+        "company_type": "scaleup",
+        "title": "Backend Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.Tech Computer Science, Jaypee Institute of Information Technology",
-    "summary": "Backend engineer at an NCR startup with solid RDS Postgres ownership; has said he would consider Bangalore for the right role."
+    "summary": "Backend engineer at an NCR startup with solid RDS Postgres ownership; has said he would consider Bangalore for the right role.",
+    "linkedin": "linkedin.com/in/nitin-saxena-8ffe60",
+    "email": "nitin.saxena@example.com"
   },
   {
     "id": "p45",
@@ -579,10 +1243,25 @@
     "location": "Bangalore",
     "current_company": "Postman",
     "current_company_type": "scaleup",
-    "skills": ["Node.js", "AWS RDS", "PostgreSQL", "TypeScript", "Microservices"],
-    "past_companies": [{"company": "Cisco", "company_type": "enterprise", "title": "Software Engineer", "years": 3}],
+    "skills": [
+      "Node.js",
+      "AWS RDS",
+      "PostgreSQL",
+      "TypeScript",
+      "Microservices"
+    ],
+    "past_companies": [
+      {
+        "company": "Cisco",
+        "company_type": "enterprise",
+        "title": "Software Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.E. Computer Science, Dayananda Sagar College of Engineering",
-    "summary": "Backend engineer on API infrastructure at a large scaleup; strong RDS Postgres work but has never been at an early-stage company."
+    "summary": "Backend engineer on API infrastructure at a large scaleup; strong RDS Postgres work but has never been at an early-stage company.",
+    "linkedin": "linkedin.com/in/bhavana-rao-35cc62",
+    "email": "bhavana.rao@example.com"
   },
   {
     "id": "p46",
@@ -592,10 +1271,25 @@
     "location": "Bangalore",
     "current_company": "Halo Health",
     "current_company_type": "startup",
-    "skills": ["Python", "FastAPI", "PostgreSQL", "AWS", "Docker"],
-    "past_companies": [{"company": "Pristyn Care", "company_type": "startup", "title": "Backend Engineer", "years": 3}],
+    "skills": [
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "AWS",
+      "Docker"
+    ],
+    "past_companies": [
+      {
+        "company": "Pristyn Care",
+        "company_type": "startup",
+        "title": "Backend Engineer",
+        "years": 3
+      }
+    ],
     "education": "B.Tech Computer Science, Jamia Millia Islamia",
-    "summary": "Health-tech backend engineer at two consecutive startups; runs Postgres on AWS but self-managed on EC2 rather than RDS."
+    "summary": "Health-tech backend engineer at two consecutive startups; runs Postgres on AWS but self-managed on EC2 rather than RDS.",
+    "linkedin": "linkedin.com/in/omar-farooq-95e07e",
+    "email": "omar.farooq@example.com"
   },
   {
     "id": "p47",
@@ -605,10 +1299,26 @@
     "location": "Bangalore",
     "current_company": "Yellow Brick",
     "current_company_type": "startup",
-    "skills": ["PostgreSQL", "AWS RDS", "Aurora", "Replication", "Query Optimisation", "Python"],
-    "past_companies": [{"company": "Oracle", "company_type": "enterprise", "title": "Database Consultant", "years": 4}],
+    "skills": [
+      "PostgreSQL",
+      "AWS RDS",
+      "Aurora",
+      "Replication",
+      "Query Optimisation",
+      "Python"
+    ],
+    "past_companies": [
+      {
+        "company": "Oracle",
+        "company_type": "enterprise",
+        "title": "Database Consultant",
+        "years": 4
+      }
+    ],
     "education": "B.E. Computer Science, Nitte Meenakshi Institute of Technology",
-    "summary": "Database specialist who now owns all RDS and Aurora infrastructure at a logistics startup, including failover and replication design."
+    "summary": "Database specialist who now owns all RDS and Aurora infrastructure at a logistics startup, including failover and replication design.",
+    "linkedin": "linkedin.com/in/tejas-kamath-0327c3",
+    "email": "tejas.kamath@example.com"
   },
   {
     "id": "p48",
@@ -618,9 +1328,24 @@
     "location": "Kolkata",
     "current_company": "Nexval",
     "current_company_type": "scaleup",
-    "skills": ["Java", "Spring Boot", "MySQL", "REST APIs", "Docker"],
-    "past_companies": [{"company": "TCS", "company_type": "enterprise", "title": "Systems Engineer", "years": 2}],
+    "skills": [
+      "Java",
+      "Spring Boot",
+      "MySQL",
+      "REST APIs",
+      "Docker"
+    ],
+    "past_companies": [
+      {
+        "company": "TCS",
+        "company_type": "enterprise",
+        "title": "Systems Engineer",
+        "years": 2
+      }
+    ],
     "education": "B.Tech Computer Science, Heritage Institute of Technology",
-    "summary": "Backend engineer at a mid-size product company in Kolkata, working on document processing services."
+    "summary": "Backend engineer at a mid-size product company in Kolkata, working on document processing services.",
+    "linkedin": "linkedin.com/in/ira-bandyopadhyay-a89710",
+    "email": "ira.bandyopadhyay@example.com"
   }
 ]

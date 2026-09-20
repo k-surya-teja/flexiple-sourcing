@@ -79,7 +79,11 @@ export async function scoreProfiles(profiles: Profile[], rubric: Rubric): Promis
     const { system, user } = loadPrompt("score", {
       role_summary: rubric.role_summary,
       criteria: renderCriteria(rubric),
-      profiles: JSON.stringify(batch),
+      // Contact details are stripped: not scoring signal, and not something to
+      // hand a model that might echo it back inside an explanation.
+      profiles: JSON.stringify(
+        batch.map(({ linkedin: _l, email: _e, ...scoreable }) => scoreable),
+      ),
     });
     return {
       batch,

@@ -24,6 +24,12 @@ export const Profile = z.object({
   past_companies: z.array(PastCompany),
   education: z.string(),
   summary: z.string(),
+  /* Optional so a profiles.json without them still validates — the brief's
+     schema does not include contact details, and this file must stay a drop-in
+     replacement. Never sent to the model: they are not evidence of fit, they
+     cost tokens, and a model given an address will eventually quote one. */
+  linkedin: z.string().optional(),
+  email: z.string().optional(),
 });
 export type Profile = z.infer<typeof Profile>;
 

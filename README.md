@@ -304,6 +304,23 @@ prompts/                analyze.md · score.md · refine.md
 data/profiles.json      the 48-profile talent pool
 ```
 
+## Contact details
+
+Each profile carries a `linkedin` and an `email`. Three decisions there:
+
+- **Both fields are optional in the schema**, so a `profiles.json` without them
+  still validates and the file stays a drop-in replacement.
+- **The values cannot reach a real person.** Emails use `example.com`, reserved
+  by RFC 2606 and guaranteed never to route. LinkedIn slugs carry a short
+  deterministic suffix, because a bare `linkedin.com/in/ananya-rao` would very
+  plausibly be some real stranger's vanity URL. For the same reason they render
+  as copyable text rather than anchors — a live link on a fictional person sends
+  the recruiter to a 404 or, worse, to someone uninvolved. With a real dataset,
+  swapping the span for an `<a>` is a one-line change.
+- **They are stripped before the scoring prompt is built.** Contact details are
+  not evidence of fit, they cost tokens on every batch, and a model handed an
+  address will eventually quote one back inside an explanation.
+
 ## Data
 
 `data/profiles.json` holds 48 fictional profiles in the schema given in the

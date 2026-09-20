@@ -34,10 +34,16 @@ export function FrozenView({
       `Shortlist — ${query}`,
       `Frozen after ${rounds} refinement ${rounds === 1 ? "round" : "rounds"}.`,
       "",
-      ...results.map(
-        (r, i) =>
-          `${i + 1}. ${r.profile.name} (${r.score.score}/100, ${r.score.verdict}) — ${r.profile.current_title}, ${r.profile.current_company}, ${r.profile.location}\n   ${r.score.headline}`,
-      ),
+      ...results.map((r, i) => {
+        const contact = [r.profile.email, r.profile.linkedin].filter(Boolean).join("  ·  ");
+        return [
+          `${i + 1}. ${r.profile.name} (${r.score.score}/100, ${r.score.verdict}) — ${r.profile.current_title}, ${r.profile.current_company}, ${r.profile.location}`,
+          `   ${r.score.headline}`,
+          contact ? `   ${contact}` : "",
+        ]
+          .filter(Boolean)
+          .join("\n");
+      }),
     ].join("\n");
     await navigator.clipboard.writeText(text);
     setCopied(true);

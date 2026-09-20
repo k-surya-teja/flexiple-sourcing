@@ -121,6 +121,44 @@ export function ScoreBadge({ score, verdict }: { score: number; verdict: "strong
   );
 }
 
+/* Contact details are rendered as copyable text rather than anchors: these
+   people are fictional, so a live link would land the recruiter on a stranger's
+   profile or a 404. Swap the span for an <a> if you load a real dataset. */
+export function CopyField({
+  label,
+  value,
+  display,
+}: {
+  label: string;
+  value: string;
+  /** Shown on screen when the full value would repeat the label. Copy still
+      puts the complete value on the clipboard. */
+  display?: string;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <button
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(value);
+          setCopied(true);
+          window.setTimeout(() => setCopied(false), 1600);
+        } catch {
+          /* clipboard blocked — the value is selectable on screen regardless */
+        }
+      }}
+      title={`Copy ${label}`}
+      className="group/copy inline-flex max-w-full cursor-pointer items-baseline gap-1.5 text-left"
+    >
+      <span className="micro shrink-0 text-ink-3/70">{label}</span>
+      <span className="truncate font-mono text-[11px] text-ink-2 underline decoration-rule decoration-dotted underline-offset-[3px] transition group-hover/copy:text-accent group-hover/copy:decoration-accent">
+        {copied ? "copied" : (display ?? value)}
+      </span>
+    </button>
+  );
+}
+
 /* ───────────────────────── Failure, designed ─────────────────────────
    Every LLM failure mode gets its own sentence and its own next step.
    A generic "something went wrong" toast is the thing being avoided.  */
